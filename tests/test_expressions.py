@@ -149,3 +149,8 @@ class TestExpression(unittest.TestCase):
         expression = Expression("(not bool(0)) or False")
         result = expression.evaluate()
         self.assertEqual(result, True)
+
+    def test_boolvar(self):
+        expression = Expression("bool($float)")
+        result = expression.evaluate({"float": 1})
+        self.assertEqual(result, True)
