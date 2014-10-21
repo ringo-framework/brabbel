@@ -33,6 +33,16 @@ def _evaluate_term(op, operand):
         else:
             return ops[op](operand[0], operand[1])
 
+def _resolve_variable(key, values):
+    value = values[key.strip("$")]
+    try:
+        value = float(value)
+    except:
+        if isinstance(value, basestring):
+            value = "'%s'" % value
+    return value
+
+
 
 class Expression(object):
 
@@ -59,17 +69,6 @@ class Expression(object):
             values = {}
         return self._evaluate(self._expression_tree, values)
 
-    def _resolve_variable(self, key, values):
-        value = values[key.strip("$")]
-        if isinstance(value, basestring):
-            value = "'%s'" % value
-        else:
-            try:
-                value = float(value)
-            except:
-                pass
-        return value
-
     def _evaluate(self, tree, values):
         operand = []
         op = None
@@ -86,7 +85,7 @@ class Expression(object):
                 func = functions[element]
             else:
                 if str(element).startswith("$"):
-                    element = self._resolve_variable(element, values)
+                    element = _resolve_variable(element, values)
                 operand.append(element)
 
             # Preevaluate here and use the result as the first operand.
