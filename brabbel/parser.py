@@ -30,13 +30,10 @@ def _make_list(element=""):
     listing = []
     element = element[0].replace("[", "").replace("]", "")
     for e in element.split(","):
-        if e.startswith("$"):
+        try:
+            e = float(e)
+        except:
             pass
-        else:
-            try:
-                e = float(e)
-            except:
-                pass
         listing.append(e)
     return [listing]
 
@@ -52,7 +49,7 @@ variable = Combine("$" + Word(alphanums + "_"))
 identifier = Word(alphas + "_")
 true = Literal("True").setParseAction(lambda t: True)
 false = Literal("False").setParseAction(lambda t: False)
-listing = Combine("[" + ZeroOrMore((number | string | variable)+ZeroOrMore("," + (number | string | variable))) + "]").setParseAction(_make_list)
+listing = Combine("[" + ZeroOrMore((number | string )+ZeroOrMore("," + (number | string ))) + "]").setParseAction(_make_list)
 function = identifier.setResultsName("name") + lpar.suppress() + Group(Optional(delimitedList(number | string | variable))) + rpar.suppress()
 atom = listing | number | string | variable | true | false | function
 
