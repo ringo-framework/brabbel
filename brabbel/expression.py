@@ -93,19 +93,3 @@ class Expression(object):
                 operand = [_evaluate_term(op, operand)]
                 op = None
         return _evaluate_term(op, operand)
-
-
-class Rule(Expression):
-    """Docstring for Rule. """
-
-    def evaluate(self, values=None):
-        """Returns True if the result of the evaluation evaluates to True.
-
-        :values: Dictionary with key value pairs containing values which
-        can be used while evaluation
-        :returns: True or False
-
-        """
-        if values is None:
-            values = {}
-        return bool(self._evaluate(self._expression_tree, values))
