@@ -24,7 +24,6 @@ def _make_list(element=""):
     :returns: List element
 
     """
-    print "element:", element
     listing = []
     element = element[0].replace("[", "").replace("]", "")
     for e in element.split(","):
@@ -36,7 +35,6 @@ def _make_list(element=""):
             except:
                 pass
         listing.append(e)
-    print listing
     return [listing]
 
 
