@@ -1,15 +1,5 @@
 import unittest
-from brabbel.expression import Expression, Rule
-
-class TestRule(unittest.TestCase):
-
-    def setUp(self):
-        pass
-
-    def test_add(self):
-        expression = Rule("1 + 1")
-        result = expression.evaluate()
-        self.assertEqual(result, True)
+from brabbel.expression import Expression
 
 class TestExpression(unittest.TestCase):
 
