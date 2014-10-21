@@ -34,7 +34,7 @@ def _evaluate_term(op, operand):
             return ops[op](operand[0], operand[1])
 
 def _resolve_variable(key, values):
-    value = values[key.strip("$")]
+    value = values.get(key.strip("$"))
     try:
         value = float(value)
     except:
