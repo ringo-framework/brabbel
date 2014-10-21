@@ -135,3 +135,19 @@ class TestOperator(unittest.TestCase):
     def test_in(self):
         result = self.parser.parse("'foo' in ['foo','bar']").asList()
         self.assertEqual(result, [["'foo'", "in", ["'foo'","'bar'"]]])
+
+    def test_date_date(self):
+        result = self.parser.parse("date('20000101')").asList()
+        self.assertEqual(result, ["date", ["'20000101'"]])
+
+    def test_date_today(self):
+        result = self.parser.parse("date('today')").asList()
+        self.assertEqual(result, ["date", ["'today'"]])
+
+    def test_varlttoday(self):
+        result = self.parser.parse("$xxx < date('today')").asList()
+        self.assertEqual(result, [["$xxx", "<", "date", ["'today'"]]])
+
+    def test_bool(self):
+        result = self.parser.parse("bool(1)").asList()
+        self.assertEqual(result, ["bool", [1.0]])

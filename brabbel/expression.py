@@ -1,8 +1,12 @@
 import operator
 from pyparsing import ParseResults
 from brabbel.parser import Parser
-from brabbel.helpers import _in
+from brabbel.helpers import _in, _date, _bool
 
+functions = {
+    "date": _date,
+    "bool": _bool
+}
 ops = {
     "not": operator.not_,
     "+": operator.add,
@@ -69,11 +73,17 @@ class Expression(object):
     def _evaluate(self, tree, values):
         operand = []
         op = None
+        func = None
         for element in tree:
-            if isinstance(element, ParseResults):
+            if func:
+                operand.append(func(element[0]))
+                func = None
+            elif isinstance(element, ParseResults):
                 operand.append(self._evaluate(element, values))
             elif element in ops.keys():
                 op = element
+            elif element in functions.keys():
+                func = functions[element]
             else:
                 if str(element).startswith("$"):
                     element = self._resolve_variable(element, values)

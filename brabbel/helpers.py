@@ -13,12 +13,15 @@ def _in(a, b):
 ########################################################################
 
 
-def _date(d):
-    if d == "today":
+def _date(ds):
+    if ds in ["'today'", 'today']:
         return date.today()
     else:
-        d.strip("'")
-        y = int(d[0:4])
-        m = int(d[4:6])
-        d = int(d[6:8])
+        ds = ds.strip("'")
+        y = int(ds[0:4])
+        m = int(ds[4:6])
+        d = int(ds[6:8])
     return date(y, m, d)
+
+def _bool(v):
+    return bool(v)

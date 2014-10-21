@@ -1,7 +1,9 @@
 from pyparsing import (
     ParserElement,
-    Combine, Literal, Word, oneOf, ZeroOrMore,
-    nums, alphanums,
+    Literal, Word,
+    Combine, Group, oneOf, ZeroOrMore, Optional,
+    nums, alphanums, alphas,
+    delimitedList,
     operatorPrecedence, opAssoc)
 
 
@@ -16,6 +18,7 @@ ParserElement.enablePackrat()
 ########################################################################
 #                               Helpers                                #
 ########################################################################
+
 
 def _make_list(element=""):
     """Returns a list element
@@ -41,13 +44,17 @@ def _make_list(element=""):
 ########################################################################
 #                                ATOMS                                 #
 ########################################################################
+lpar = Literal("(")
+rpar = Literal(")")
 number = Word(nums + '.').setParseAction(lambda t: float(t[0]))
 string = Combine("'" + Word(alphanums + "_") + "'")
 variable = Combine("$" + Word(alphanums + "_"))
+identifier = Word(alphas + "_")
 true = Literal("True").setParseAction(lambda t: True)
 false = Literal("False").setParseAction(lambda t: False)
-listing = Combine("[" + ZeroOrMore((number|string|variable)+ZeroOrMore(","+(number|string|variable))) + "]").setParseAction(_make_list)
-atom = listing | number | string | variable | true | false
+listing = Combine("[" + ZeroOrMore((number | string | variable)+ZeroOrMore("," + (number | string | variable))) + "]").setParseAction(_make_list)
+function = identifier.setResultsName("name") + lpar.suppress() + Group(Optional(delimitedList(number | string | variable))) + rpar.suppress()
+atom = listing | number | string | variable | true | false | function
 
 ########################################################################
 #                              Operators                               #

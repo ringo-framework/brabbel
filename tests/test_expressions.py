@@ -111,3 +111,41 @@ class TestExpression(unittest.TestCase):
         expression = Expression("not ('foo' in ['foo','bar'])")
         result = expression.evaluate()
         self.assertEqual(result, False)
+
+    def test_datetoday(self):
+        from datetime import date
+        expression = Expression("date('today')")
+        result = expression.evaluate()
+        self.assertEqual(result, date.today())
+
+    def test_datexlttoday(self):
+        from datetime import date
+        expression = Expression("date('20000101') < date('today')")
+        result = expression.evaluate()
+        self.assertEqual(result, True)
+
+    def test_datexgttoday(self):
+        from datetime import date
+        expression = Expression("date('20000101') > date('today')")
+        result = expression.evaluate()
+        self.assertEqual(result, False)
+
+    def test_bool(self):
+        expression = Expression("bool(1)")
+        result = expression.evaluate()
+        self.assertEqual(result, True)
+
+    def test_boolorTrue(self):
+        expression = Expression("bool(0) or True")
+        result = expression.evaluate()
+        self.assertEqual(result, True)
+
+    def test_boolandFalse(self):
+        expression = Expression("bool(0) and False")
+        result = expression.evaluate()
+        self.assertEqual(result, False)
+
+    def test_notboolor(self):
+        expression = Expression("(not bool(0)) or False")
+        result = expression.evaluate()
+        self.assertEqual(result, True)
