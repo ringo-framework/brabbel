@@ -1,6 +1,14 @@
-A sample Python project
-=======================
+Brabbel
+=======
 
-A sample project that exists as an aid to the `Python Packaging User Guide
-Tutorial
-<https://python-packaging-user-guide.readthedocs.org/en/latest/tutorial.html>`_.
+How to start:
+
+{{{
+from brabbel import Expression
+
+expr = Expression("(4 + 6) * $var")
+result = expr.evaluate({"var": 10})
+print result
+>>> 100.0
+
+}}}

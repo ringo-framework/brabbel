@@ -1,13 +1,17 @@
-A sample Python project
-=======================
+Brabbel
+=======
 
-This is the description file for the project.
+Brabbel is a small python based expression language which can be used to
+evaluate simple expressions.
 
-The file should use UTF-8 encoding and be written using ReStructured Text. It
-will be used to generate the project webpage on PyPI, and should be written for
-that purpose.
+Brabbel provides the following set of features:
 
-Typical contents for this file would include an overview of the project, basic
-usage examples, etc. Generally, including the project changelog in here is not
-a good idea, although a simple "What's New" section for the most recent version
-may be appropriate.
+* Values: Strings, Numbers, Variables , Lists
+* simple arithmetic operations: + - / *
+* simple equation : < > <= >= == !=
+* simple bool operation: and or not
+* function calls: date, bool
+* other: check if values is _in_ a list
+
+Brabbel is the german term for the first "language" of a baby and emphasises
+the reduced coverage of this language.
