@@ -56,6 +56,16 @@ atom = listing | number | string | variable | true | false | function
 ########################################################################
 #                              Operators                               #
 ########################################################################
+
+opmapping = {
+    " ge ": " >= ",
+    " gt ": " > ",
+    " lt ": " < ",
+    " le ": " <= ",
+    " eq ": " == ",
+    " ne ": " != "
+}
+
 o_not = Literal("not")
 o_plus = Literal("+")
 o_minus = Literal("-")
@@ -97,6 +107,7 @@ class Parser(object):
         """@todo: to be defined1. """
         pass
 
+
     def parse(self, expr):
         """Returns the BNF-Tree of the given expression
 
@@ -104,4 +115,7 @@ class Parser(object):
         :returns: Returns the parsed BNF form the the expression
 
         """
+        # Replace operators like gt, lt...
+        for op in opmapping:
+            expr = expr.replace(op, opmapping[op])
         return bnf.parseString(expr)
