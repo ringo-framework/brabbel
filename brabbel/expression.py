@@ -1,11 +1,12 @@
 import operator
 from pyparsing import ParseResults
 from brabbel.parser import Parser
-from brabbel.helpers import _in, _date, _bool
+from brabbel.helpers import _in, _date, _bool, _len
 
 functions = {
     "date": _date,
-    "bool": _bool
+    "bool": _bool,
+    "len": _len
 }
 ops = {
     "not": operator.not_,

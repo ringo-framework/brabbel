@@ -28,3 +28,11 @@ def _bool(v):
     if v == "''":
         return False
     return bool(v)
+
+
+def _len(v):
+    if isinstance(v, float):
+        v = str(int(v))
+    elif isinstance(v, basestring):
+        v.strip("'")
+    return len(v)
