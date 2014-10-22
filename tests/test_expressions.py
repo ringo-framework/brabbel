@@ -160,7 +160,12 @@ class TestExpression(unittest.TestCase):
         self.assertEqual(result, False)
 
 class TestReallife(unittest.TestCase):
-    def test_boolvar(self):
+    def test_1(self):
         expression = Expression("( 'antragsteller' in       ['institutionen_einsicht', 'user', 'antragsteller']   ) == False")
+        result = expression.evaluate()
+        self.assertEqual(result, False)
+
+    def test_2(self):
+        expression = Expression("( 'abfrages' eq 'antrags' ) and ( '1' eq '2') or ( 'admin' in ['institutionen_einsicht','user','antragsteller'] ) or ( 'formularmanager' in ['institutionen_einsicht','user','antragsteller'] )")
         result = expression.evaluate()
         self.assertEqual(result, False)
