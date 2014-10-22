@@ -88,7 +88,7 @@ class Expression(object):
             elif element in functions.keys():
                 func = functions[element]
             else:
-                if str(element).startswith("$"):
+                if isinstance(element, basestring) and element.startswith("$"):
                     element = _resolve_variable(element, values)
                 operand.append(element)
 
