@@ -75,7 +75,11 @@ class Expression(object):
         func = None
         for element in tree:
             if func:
-                operand.append(func(element[0]))
+                param = element[0]
+                if isinstance(param, basestring) and param.startswith("$"):
+                    param = _resolve_variable(param, values)
+                result = func(param)
+                operand.append(result)
                 func = None
             elif isinstance(element, ParseResults):
                 operand.append(self._evaluate(element, values))
