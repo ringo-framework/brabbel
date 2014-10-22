@@ -153,3 +153,9 @@ class TestExpression(unittest.TestCase):
         expression = Expression("bool($float)")
         result = expression.evaluate({"float": 1})
         self.assertEqual(result, True)
+
+class TestReallife(unittest.TestCase):
+    def test_boolvar(self):
+        expression = Expression("( 'antragsteller' in       ['institutionen_einsicht', 'user', 'antragsteller']   ) == False")
+        result = expression.evaluate()
+        self.assertEqual(result, False)
