@@ -44,12 +44,13 @@ def _make_list(element=""):
 lpar = Literal("(")
 rpar = Literal(")")
 number = Word(nums + '.').setParseAction(lambda t: float(t[0]))
-string = Combine("'" + Word(alphanums + "_") + "'")
 variable = Combine("$" + Word(alphanums + "_"))
+string = Combine("'" + Word(alphanums + "_") + "'")
+delimiter = Optional(" ").suppress() + "," + Optional(" ").suppress()
 identifier = Word(alphas + "_")
 true = Literal("True").setParseAction(lambda t: True)
 false = Literal("False").setParseAction(lambda t: False)
-listing = Combine("[" + ZeroOrMore((number | string )+ZeroOrMore("," + (number | string ))) + "]").setParseAction(_make_list)
+listing = Combine("[" + ZeroOrMore((number | string )+ZeroOrMore(delimiter + (number | string ))) + "]").setParseAction(_make_list)
 function = identifier.setResultsName("name") + lpar.suppress() + Group(Optional(delimitedList(number | string | variable))) + rpar.suppress()
 atom = listing | number | string | variable | true | false | function
 
