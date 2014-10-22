@@ -23,5 +23,8 @@ def _date(ds):
         d = int(ds[6:8])
     return date(y, m, d)
 
+
 def _bool(v):
+    if v == "''":
+        return False
     return bool(v)
