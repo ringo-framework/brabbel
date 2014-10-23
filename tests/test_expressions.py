@@ -129,10 +129,40 @@ class TestExpression(unittest.TestCase):
         result = expression.evaluate()
         self.assertEqual(result, False)
 
-    def test_bool(self):
+    def test_bool1(self):
         expression = Expression("bool(1)")
         result = expression.evaluate()
         self.assertEqual(result, True)
+
+    def test_bool0(self):
+        expression = Expression("bool(0)")
+        result = expression.evaluate()
+        self.assertEqual(result, True)
+
+    def test_boolstring(self):
+        expression = Expression("bool('foo')")
+        result = expression.evaluate()
+        self.assertEqual(result, True)
+
+    def test_boolstringempty(self):
+        expression = Expression("bool('')")
+        result = expression.evaluate()
+        self.assertEqual(result, False)
+
+    def test_boollist(self):
+        expression = Expression("bool([1,2,3])")
+        result = expression.evaluate()
+        self.assertEqual(result, True)
+
+    def test_boollistempty(self):
+        expression = Expression("bool([])")
+        result = expression.evaluate()
+        self.assertEqual(result, False)
+
+    def test_boolempty(self):
+        expression = Expression("bool()")
+        result = expression.evaluate()
+        self.assertEqual(result, False)
 
     def test_boolorTrue(self):
         expression = Expression("bool(0) or True")
@@ -147,7 +177,7 @@ class TestExpression(unittest.TestCase):
     def test_notboolor(self):
         expression = Expression("(not bool(0)) or False")
         result = expression.evaluate()
-        self.assertEqual(result, True)
+        self.assertEqual(result, False)
 
     def test_boolvar(self):
         expression = Expression("bool($float)")

@@ -45,13 +45,13 @@ lpar = Literal("(")
 rpar = Literal(")")
 number = Word(nums + '.').setParseAction(lambda t: float(t[0]))
 variable = Combine("$" + Word(alphanums + "_"))
-string = Combine("'" + Word(alphanums + "_") + "'")
+string = Combine("'" + Optional(Word(alphanums + "_")) + "'")
 delimiter = Optional(" ").suppress() + "," + Optional(" ").suppress()
 identifier = Word(alphas + "_")
 true = Literal("True").setParseAction(lambda t: True)
 false = Literal("False").setParseAction(lambda t: False)
 listing = Combine("[" + ZeroOrMore((number | string )+ZeroOrMore(delimiter + (number | string ))) + "]").setParseAction(_make_list)
-function = identifier.setResultsName("name") + lpar.suppress() + Group(Optional(delimitedList(number | string | variable))) + rpar.suppress()
+function = identifier.setResultsName("name") + lpar.suppress() + Group(Optional(delimitedList(number | string | variable | listing))) + rpar.suppress()
 atom = listing | number | string | variable | true | false | function
 
 ########################################################################

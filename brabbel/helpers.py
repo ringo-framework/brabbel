@@ -25,9 +25,32 @@ def _date(ds):
 
 
 def _bool(v):
-    if v == "''":
+    """Returns True if the given value v is set and not empty. Empty
+    means:
+
+     * For String: No value or empty String
+     * For Lists: No value or empty Lists
+     * For Numbers: No value (0 is consideret as valid value)
+
+    """
+    if v is None:
         return False
-    return bool(v)
+    if isinstance(v, basestring):
+        if v == "''":
+            return False
+        else:
+            return bool(v)
+    elif isinstance(v, list):
+        if len(v) == 0:
+            return False
+        elif v[0] == '':
+            # FIXME: check why empty lists become [''] after parsing.
+            # (ti) <2014-10-23 10:56>
+            return False
+        else:
+            return True
+    else:
+        return bool(str(v))
 
 
 def _len(v):
