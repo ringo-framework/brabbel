@@ -214,3 +214,10 @@ class TestReallife(unittest.TestCase):
         values = {'ap_austritt': u'1', 'pp_phase_s': u'', 'ap_q1': u'Rechtsanwalt und Notarfachangestellte', 'ap_geschlecht': u'0', 'ap_austritt_ja': u'ja', 'programm_info': '', 'bericht_state_id': 2, 'pp_austritt_ca': datetime.date(2014, 3, 14), 'ap_ausb': u'1', 'pp_phase': u'', 'pp_ga': [u'2', u''], 'ap_austritt_date': datetime.date(2014, 3, 14), 'proj_kommentar': u'', 'proj_fkz': u'09.00101.13', 'ap_bj1': u'', 'ap_bj2': u'', 'ap_bj3': u'', 'pp_beginn': u'seit', 'updated': datetime.datetime(2014, 10, 23, 12, 41, 39), '_roles': '', 'ap_quer': u'1', 'ap_quali': u'1', 'pp_gesamtst': u'275', 'form_info': '', 'pp_kinder': [u'1', u''], 'created': datetime.datetime(2014, 9, 23, 14, 5, 30), 'projekt': None, 'ausbildungsformat': None, 'pp_eintritt_ps': datetime.date(2014, 1, 6), 'logo_einbindung': None, 'pp_eintritt_vb': None, 'ap_code': u'A.CB257', 'ap_q2': u'', 'ap_austritt_s': u'', 'ap_mhg': u'0', 'ap_q3': u''}
         result = expression.evaluate(values)
         self.assertEqual(result, False)
+
+    def test_5(self):
+        import datetime
+        expression = Expression("len($xxx) le 9")
+        values = {'xxx': u'abcdefghi'}
+        result = expression.evaluate(values)
+        self.assertEqual(result, True)
