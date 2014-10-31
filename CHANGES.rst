@@ -1,3 +1,7 @@
+0.2.4
+=====
+- Compatiblity: Allow "-" in variable names.
+- Fixed strip of "'" in "len" function.
 
 0.2.3
 =====
