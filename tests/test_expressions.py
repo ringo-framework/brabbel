@@ -11,15 +11,30 @@ class TestExpression(unittest.TestCase):
         result = expression.evaluate()
         self.assertEqual(result, 1.0)
 
+    def test_negativenumber(self):
+        expression = Expression("-1")
+        result = expression.evaluate()
+        self.assertEqual(result, -1.0)
+
     def test_string(self):
         expression = Expression("'1'")
         result = expression.evaluate()
-        self.assertEqual(result, "'1'")
+        self.assertEqual(result, "1")
+
+    def test_stringwithspace(self):
+        expression = Expression("'foo and bar'")
+        result = expression.evaluate()
+        self.assertEqual(result, "foo and bar")
 
     def test_variable(self):
         expression = Expression("$string")
         result = expression.evaluate({"string": "string"})
-        self.assertEqual(result, "'string'")
+        self.assertEqual(result, "string")
+
+    def test_missingvariable(self):
+        expression = Expression("$missingstring")
+        result = expression.evaluate({"string": "string"})
+        self.assertEqual(result, None)
 
     def test_true(self):
         expression = Expression("True")
@@ -84,6 +99,11 @@ class TestExpression(unittest.TestCase):
     def test_plusnediv(self):
         expression = Expression("2 + 2 != 8 / 2")
         result = expression.evaluate()
+        self.assertEqual(result, False)
+
+    def test_eqnegnumber(self):
+        expression = Expression("$a == -1")
+        result = expression.evaluate({"a": 1})
         self.assertEqual(result, False)
 
     def test_eqandgt(self):
@@ -174,6 +194,16 @@ class TestExpression(unittest.TestCase):
         result = expression.evaluate()
         self.assertEqual(result, False)
 
+    def test_notboolemptystring(self):
+        expression = Expression("not bool('')")
+        result = expression.evaluate()
+        self.assertEqual(result, True)
+
+    def test_notemptystring(self):
+        expression = Expression("not ''")
+        result = expression.evaluate()
+        self.assertEqual(result, True)
+
     def test_notboolor(self):
         expression = Expression("(not bool(0)) or False")
         result = expression.evaluate()
@@ -188,6 +218,22 @@ class TestExpression(unittest.TestCase):
         expression = Expression("bool($string)")
         result = expression.evaluate({"string": ""})
         self.assertEqual(result, False)
+
+    def test_addstr(self):
+        expression = Expression("$a + 'abc'")
+        result = expression.evaluate({"a": "xyz"})
+        self.assertEqual(result, 'xyzabc')
+
+
+    def test_len4ticks(self):
+        expression = Expression("len($a)")
+        result = expression.evaluate({"a": "''''"})
+        self.assertEqual(result, 4)
+
+    #def test_lenexpr(self):
+    #    expression = Expression("len(($a + 'abc'))")
+    #    result = expression.evaluate({"a": "xyz"})
+    #    self.assertEqual(result, 6)
 
 class TestReallife(unittest.TestCase):
     def test_1(self):

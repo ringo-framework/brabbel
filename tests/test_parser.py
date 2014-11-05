@@ -13,7 +13,7 @@ class TestAtom(unittest.TestCase):
 
     def test_string(self):
         result = self.parser.parse("'xyz'").asList()
-        self.assertEqual(result, ["'xyz'"])
+        self.assertEqual(result, ["xyz"])
 
     def test_variable(self):
         result = self.parser.parse("$xyz").asList()
@@ -42,7 +42,7 @@ class TestOperator(unittest.TestCase):
 
     def test_not_string(self):
         result = self.parser.parse("not 'xyz'").asList()
-        self.assertEqual(result, [["not", "'xyz'"]])
+        self.assertEqual(result, [["not", "xyz"]])
 
     def test_not_var(self):
         result = self.parser.parse("not $xyz").asList()
@@ -100,6 +100,10 @@ class TestOperator(unittest.TestCase):
         result = self.parser.parse("2 > 1").asList()
         self.assertEqual(result, [[2.0, ">", 1.0]])
 
+    def test_gtstring(self):
+        result = self.parser.parse("'foo and bar' lt 'baz'").asList()
+        self.assertEqual(result, [["foo and bar", "<", "baz"]])
+
     def test_eq(self):
         result = self.parser.parse("2 == 2").asList()
         self.assertEqual(result, [[2.0, "==", 2.0]])
@@ -134,19 +138,19 @@ class TestOperator(unittest.TestCase):
 
     def test_in(self):
         result = self.parser.parse("'foo' in ['foo','bar']").asList()
-        self.assertEqual(result, [["'foo'", "in", ["'foo'","'bar'"]]])
+        self.assertEqual(result, [["foo", "in", ["foo","bar"]]])
 
     def test_date_date(self):
         result = self.parser.parse("date('20000101')").asList()
-        self.assertEqual(result, ["date", ["'20000101'"]])
+        self.assertEqual(result, ["date", ["20000101"]])
 
     def test_date_today(self):
         result = self.parser.parse("date('today')").asList()
-        self.assertEqual(result, ["date", ["'today'"]])
+        self.assertEqual(result, ["date", ["today"]])
 
     def test_varlttoday(self):
         result = self.parser.parse("$xxx < date('today')").asList()
-        self.assertEqual(result, [["$xxx", "<", "date", ["'today'"]]])
+        self.assertEqual(result, [["$xxx", "<", "date", ["today"]]])
 
     def test_bool(self):
         result = self.parser.parse("bool(1)").asList()
