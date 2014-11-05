@@ -40,7 +40,7 @@ def _resolve_variable(key, values):
         value = float(value)
     except:
         if isinstance(value, basestring):
-            value = "'%s'" % value
+            value = "%s" % value
     return value
 
 
