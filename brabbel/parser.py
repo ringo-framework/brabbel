@@ -43,9 +43,9 @@ def _make_list(element=""):
 ########################################################################
 lpar = Literal("(")
 rpar = Literal(")")
-number = Word(nums + '.').setParseAction(lambda t: float(t[0]))
 lquote = Literal("'")
 rquote = Literal("'")
+number = Combine(Optional("-") + Word(nums + '.')).setParseAction(lambda t: float(t[0]))
 # TODO: Remove "-" from list of allowed chars. Is only here for
 # compatibility. (None) <2014-10-28 14:04>
 variable = Combine("$" + Word(alphanums + "_" + "-"))
