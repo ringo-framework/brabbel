@@ -1,3 +1,10 @@
+0.2.5
+=====
+- Log warning if a variable can not be resolved in the values dict.
+- Allow signed numbers. Currently only negativ sign is allowed.
+- String to not have a "'" anymore. 
+- Added more tests.
+
 0.2.4
 =====
 - Compatiblity: Allow "-" in variable names.
