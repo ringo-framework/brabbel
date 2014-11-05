@@ -56,6 +56,4 @@ def _bool(v):
 def _len(v):
     if isinstance(v, float):
         v = str(int(v))
-    elif isinstance(v, basestring):
-        v = v.strip("'")
     return len(v)
