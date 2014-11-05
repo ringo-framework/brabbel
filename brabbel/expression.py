@@ -1,7 +1,11 @@
+import logging
 import operator
 from pyparsing import ParseResults
 from brabbel.parser import Parser
 from brabbel.helpers import _in, _date, _bool, _len
+
+logging.basicConfig()
+log = logging.getLogger(__name__)
 
 functions = {
     "date": _date,
@@ -36,6 +40,8 @@ def _evaluate_term(op, operand):
 
 def _resolve_variable(key, values):
     value = values.get(key.strip("$"))
+    if not value:
+        log.warning("Variable %s could not found in the values.")
     try:
         value = float(value)
     except:
