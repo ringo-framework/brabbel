@@ -40,8 +40,9 @@ def _evaluate_term(op, operand):
 
 def _resolve_variable(key, values):
     value = values.get(key.strip("$"))
-    if not value:
-        log.warning("Variable %s could not found in the values.")
+    if value is None:
+        log.warning("Variable %s could not found in the values."
+                    % key.strip("$"))
     try:
         value = float(value)
     except:
