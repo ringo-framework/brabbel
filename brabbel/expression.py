@@ -39,8 +39,9 @@ def _evaluate_term(op, operand):
             return ops[op](operand[0], operand[1])
 
 def _resolve_variable(key, values):
-    value = values.get(key.strip("$"))
-    if value is None:
+    try:
+        value = values[key.strip("$")]
+    except KeyError:
         log.warning("Variable %s could not found in the values."
                     % key.strip("$"))
     try:
