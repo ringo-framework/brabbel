@@ -270,6 +270,5 @@ class TestReallife(unittest.TestCase):
 
     def test_6(self):
         expression = Expression("( 'LOP-PM' in ['admins'] ) or ( 'False' == 'True' )")
-        print expression._expression_tree
         result = expression.evaluate({})
         self.assertEqual(result, False)
