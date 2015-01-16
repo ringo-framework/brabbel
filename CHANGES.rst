@@ -1,8 +1,14 @@
+0.2.6
+=====
+- Added folders for documentation (currently empty)
+- Allow "-" in Strings
+- Added more tests.
+
 0.2.5
 =====
 - Log warning if a variable can not be resolved in the values dict.
 - Allow signed numbers. Currently only negativ sign is allowed.
-- String to not have a "'" anymore. 
+- String to not have a "'" anymore.
 - Added more tests.
 
 0.2.4
