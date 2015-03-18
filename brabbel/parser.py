@@ -30,10 +30,6 @@ def _make_list(element=""):
     listing = []
     element = element[0].replace("[", "").replace("]", "")
     for e in element.split(","):
-        try:
-            e = float(e)
-        except:
-            pass
         listing.append(e)
     return [listing]
 
