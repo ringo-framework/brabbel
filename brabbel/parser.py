@@ -19,6 +19,12 @@ ParserElement.enablePackrat()
 #                               Helpers                                #
 ########################################################################
 
+def _number(origString, loc, tokens):
+    try:
+        return int(tokens[0])
+    except:
+        return float(tokens[0])
+
 
 def _make_list(element=""):
     """Returns a list element
@@ -41,7 +47,7 @@ lpar = Literal("(")
 rpar = Literal(")")
 lquote = Literal("'")
 rquote = Literal("'")
-number = Combine(Optional("-") + Word(nums + '.')).setParseAction(lambda t: float(t[0]))
+number = Combine(Optional("-") + Word(nums + '.')).setParseAction(_number)
 # TODO: Remove "-" from list of allowed chars. Is only here for
 # compatibility. (None) <2014-10-28 14:04>
 variable = Combine("$" + Word(alphanums + "_" + "-"))
