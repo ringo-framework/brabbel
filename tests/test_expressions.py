@@ -49,7 +49,7 @@ class TestExpression(unittest.TestCase):
     def test_listing(self):
         expression = Expression("[1,2,3]")
         result = expression.evaluate()
-        self.assertEqual(result, [1.0,2.0,3.0])
+        self.assertEqual(result, [1, 2, 3])
 
     def test_nottrue(self):
         expression = Expression("not True")

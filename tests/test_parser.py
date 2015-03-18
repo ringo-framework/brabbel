@@ -29,7 +29,7 @@ class TestAtom(unittest.TestCase):
 
     def test_listing(self):
         result = self.parser.parse("[1,2,3]").asList()
-        self.assertEqual(result, [[1.0,2.0,3.0]])
+        self.assertEqual(result, [[1,2,3]])
 
 class TestOperator(unittest.TestCase):
 
