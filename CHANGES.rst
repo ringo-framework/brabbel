@@ -1,3 +1,7 @@
+0.2.7
+=====
+- Fixed handling of integer and string values in lists.
+
 0.2.6
 =====
 - Added folders for documentation (currently empty)
