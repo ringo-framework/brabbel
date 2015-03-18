@@ -34,8 +34,7 @@ def _make_list(element=""):
 
     """
     listing = []
-    element = element[0].replace("[", "").replace("]", "")
-    for e in element.split(","):
+    for e in element:
         listing.append(e)
     return [listing]
 
@@ -44,7 +43,9 @@ def _make_list(element=""):
 #                                ATOMS                                 #
 ########################################################################
 lpar = Literal("(")
+lbr = Literal("[")
 rpar = Literal(")")
+rbr = Literal("]")
 lquote = Literal("'")
 rquote = Literal("'")
 number = Combine(Optional("-") + Word(nums + '.')).setParseAction(_number)
@@ -52,11 +53,10 @@ number = Combine(Optional("-") + Word(nums + '.')).setParseAction(_number)
 # compatibility. (None) <2014-10-28 14:04>
 variable = Combine("$" + Word(alphanums + "_" + "-"))
 string = Combine(lquote.suppress() + Optional(Word(alphanums + "_" + " " + "-")) + rquote.suppress())
-delimiter = Optional(" ").suppress() + "," + Optional(" ").suppress()
 identifier = Word(alphas + "_")
 true = Literal("True").setParseAction(lambda t: True)
 false = Literal("False").setParseAction(lambda t: False)
-listing = Combine("[" + ZeroOrMore((number | string )+ZeroOrMore(delimiter + (number | string ))) + "]").setParseAction(_make_list)
+listing = lbr.suppress() + delimitedList(Optional(string|number)).setParseAction(_make_list) + rbr.suppress()
 function = identifier.setResultsName("name") + lpar.suppress() + Group(Optional(delimitedList(number | string | variable | listing))) + rpar.suppress()
 atom = listing | number | string | variable | true | false | function
 
