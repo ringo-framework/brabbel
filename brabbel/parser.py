@@ -54,11 +54,12 @@ number = Combine(Optional("-") + Word(nums + '.')).setParseAction(_number)
 variable = Combine("$" + Word(alphanums + "_" + "-"))
 string = Combine(lquote.suppress() + Optional(Word(alphanums + "_" + " " + "-")) + rquote.suppress())
 identifier = Word(alphas + "_")
+none = Literal("None").setParseAction(lambda t: False)
 true = Literal("True").setParseAction(lambda t: True)
 false = Literal("False").setParseAction(lambda t: False)
 listing = lbr.suppress() + delimitedList(Optional(string|number)).setParseAction(_make_list) + rbr.suppress()
 function = identifier.setResultsName("name") + lpar.suppress() + Group(Optional(delimitedList(number | string | variable | listing))) + rpar.suppress()
-atom = listing | number | string | variable | true | false | function
+atom = listing | number | string | variable | true | false | none | function
 
 ########################################################################
 #                              Operators                               #
