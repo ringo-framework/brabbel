@@ -204,6 +204,21 @@ class TestExpression(unittest.TestCase):
         result = expression.evaluate()
         self.assertEqual(result, True)
 
+    def test_notNone(self):
+        expression = Expression("not None")
+        result = expression.evaluate()
+        self.assertEqual(result, True)
+
+    def test_notTrue(self):
+        expression = Expression("not True")
+        result = expression.evaluate()
+        self.assertEqual(result, False)
+
+    def test_notFalse(self):
+        expression = Expression("not False")
+        result = expression.evaluate()
+        self.assertEqual(result, True)
+
     def test_notboolor(self):
         expression = Expression("(not bool(0)) or False")
         result = expression.evaluate()
