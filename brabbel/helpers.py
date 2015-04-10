@@ -1,3 +1,4 @@
+from builtins import str
 from datetime import date
 
 ########################################################################
@@ -35,7 +36,7 @@ def _bool(v):
     """
     if v is None:
         return False
-    if isinstance(v, basestring):
+    if isinstance(v, str):
         if v == "''":
             return False
         else:

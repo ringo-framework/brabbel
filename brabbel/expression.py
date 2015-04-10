@@ -1,3 +1,4 @@
+from builtins import object
 import logging
 import operator
 from pyparsing import ParseResults
@@ -49,7 +50,7 @@ def _resolve_variable(key, values):
     try:
         value = float(value)
     except:
-        if isinstance(value, basestring):
+        if isinstance(value, str):
             value = "%s" % value
     return value
 
@@ -87,19 +88,19 @@ class Expression(object):
         for element in tree:
             if func:
                 param = element[0]
-                if isinstance(param, basestring) and param.startswith("$"):
+                if isinstance(param, str) and param.startswith("$"):
                     param = _resolve_variable(param, values)
                 result = func(param)
                 operand.append(result)
                 func = None
             elif isinstance(element, ParseResults):
                 operand.append(self._evaluate(element, values))
-            elif element in ops.keys():
+            elif element in list(ops.keys()):
                 op = element
-            elif element in functions.keys():
+            elif element in list(functions.keys()):
                 func = functions[element]
             else:
-                if isinstance(element, basestring) and element.startswith("$"):
+                if isinstance(element, str) and element.startswith("$"):
                     element = _resolve_variable(element, values)
                 operand.append(element)
 
