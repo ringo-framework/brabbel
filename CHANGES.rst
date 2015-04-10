@@ -1,3 +1,7 @@
+0.3.0
+=====
+Make Brabbel Python3 compatible. Added python-future package as dependency
+
 0.2.7
 =====
 - Fixed handling of integer and string values in lists.
