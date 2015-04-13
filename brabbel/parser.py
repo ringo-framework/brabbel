@@ -54,7 +54,7 @@ rquote = Literal("'")
 number = Combine(Optional("-") + Word(nums + '.')).setParseAction(_number)
 # TODO: Remove "-" from list of allowed chars. Is only here for
 # compatibility. (None) <2014-10-28 14:04>
-variable = Combine("$" + Word(alphanums + "_" + "-"))
+variable = Combine("$" + Word(alphanums + "_" + "-" + "."))
 string = Combine(lquote.suppress() + Optional(Word(alphanums + "_" + " " + "-")) + rquote.suppress())
 identifier = Word(alphas + "_")
 none = Literal("None").setParseAction(lambda t: False)

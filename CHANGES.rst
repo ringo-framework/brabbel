@@ -2,6 +2,8 @@
 =====
 Make Brabbel Python3 compatible. Added python-future package as dependency
 
+- Allow dots "." in variable names.
+
 0.2.7
 =====
 - Fixed handling of integer and string values in lists.
