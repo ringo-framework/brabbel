@@ -1,3 +1,4 @@
+import logging
 from builtins import object
 from pyparsing import (
     ParserElement,
@@ -14,6 +15,7 @@ string    :: '0'..'9''a'..'z''_'+
 variable  :: '$' string
 
 """
+log = logging.getLogger(__name__)
 ParserElement.enablePackrat()
 
 ########################################################################
@@ -127,4 +129,7 @@ class Parser(object):
         # Replace operators like gt, lt...
         for op in opmapping:
             expr = expr.replace(op, opmapping[op])
-        return bnf.parseString(expr)
+        try:
+            return bnf.parseString(expr)
+        except Exception as ex:
+            log.exception("Error on parsing %s" % expr)
