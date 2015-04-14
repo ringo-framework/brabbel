@@ -36,8 +36,13 @@ def _evaluate_term(op, operand):
             return operand[0]
         elif op == "not":
             return ops[op](operand[0])
-        else:
+        # Only evalutate the term if both operators of the operand are
+        # of the same type. Otherwise the behavior is not well defined
+        # and we return False!
+        elif type(operand[0]) == type(operand[1]):
             return ops[op](operand[0], operand[1])
+        else:
+            return False
 
 def _resolve_variable(key, values):
     try:
