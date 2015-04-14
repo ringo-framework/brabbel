@@ -51,12 +51,6 @@ def _resolve_variable(key, values):
         log.warning("Variable %s could not found in the values."
                     % key.strip("$"))
         value = None
-
-    try:
-        value = float(value)
-    except:
-        if isinstance(value, str):
-            value = "%s" % value
     return value
 
 
