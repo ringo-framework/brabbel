@@ -1,3 +1,9 @@
+0.3.1
+=====
+- Make comparison of operators more typesafe. Evaluation of terms is only
+  valid of operators of the same type. Otherwise the term will evaluate to
+  False.
+
 0.3.0
 =====
 Make Brabbel Python3 compatible. Added python-future package as dependency
