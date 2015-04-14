@@ -1,3 +1,4 @@
+from __future__ import division
 from builtins import str
 from datetime import date
 
@@ -8,6 +9,9 @@ from datetime import date
 
 def _in(a, b):
     return a in b
+
+def _div(a, b):
+    return a / b
 
 ########################################################################
 #                              Functions                               #
