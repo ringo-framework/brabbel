@@ -1,4 +1,5 @@
 from builtins import object
+import sys
 import logging
 import operator
 from pyparsing import ParseResults
@@ -36,13 +37,17 @@ def _evaluate_term(op, operand):
             return operand[0]
         elif op == "not":
             return ops[op](operand[0])
-        # Only evalutate the term if both operators of the operand are
-        # of the same type. Otherwise the behavior is not well defined
-        # and we return False!
-        elif type(operand[0]) == type(operand[1]):
-            return ops[op](operand[0], operand[1])
+        elif (sys.version_info > (3, 0)):
+            # Only evalutate the term if both operators of the operand are
+            # of the same type.
+            if type(operand[0]) == type(operand[1]):
+                return ops[op](operand[0], operand[1])
+            else:
+                return False
         else:
-            return False
+            # Please note that under Python2 comarison between non equal
+            # type are possible but not well defined!
+            return ops[op](operand[0], operand[1])
 
 def _resolve_variable(key, values):
     try:
