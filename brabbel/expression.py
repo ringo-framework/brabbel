@@ -39,17 +39,19 @@ def _evaluate_term(op, operand):
             return operand[0]
         elif op == "not":
             return ops[op](operand[0])
-        elif (sys.version_info > (3, 0)):
+        elif op == "in":
+            return ops[op](operand[0], operand[1])
+        elif type(operand[0]) == type(operand[1]):
             # Only evalutate the term if both operators of the operand are
             # of the same type.
-            if type(operand[0]) == type(operand[1]):
-                return ops[op](operand[0], operand[1])
-            else:
-                return False
-        else:
-            # Please note that under Python2 comarison between non equal
-            # type are possible but not well defined!
             return ops[op](operand[0], operand[1])
+        else:
+            # If the type of the operands are not the same, then raise
+            # an expection.
+            raise Exception("Can not use operands '%s' on operator '%s'. "
+                            "Type of operands must be equal" 
+                            % ((operand[0], type(operand[0]),
+                               operand[1], type(operand[1])), op))
 
 def _resolve_variable(key, values):
     try:
