@@ -4,7 +4,9 @@ import logging
 import operator
 from pyparsing import ParseResults
 from brabbel.parser import Parser
-from brabbel.helpers import _in, _date, _bool, _len, _div
+from brabbel.helpers import _in, _date, _bool, _len
+from brabbel.operators import Div
+
 
 logging.basicConfig()
 log = logging.getLogger(__name__)
@@ -19,7 +21,7 @@ ops = {
     "+": operator.add,
     "-": operator.sub,
     "*": operator.mul,
-    "/": _div,
+    "/": Div().eval,
     "<": operator.lt,
     "<=": operator.le,
     ">=": operator.ge,
