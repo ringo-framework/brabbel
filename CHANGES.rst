@@ -3,6 +3,7 @@
 - Make comparison of operators more typesafe. Evaluation of terms is only
   valid of operators of the same type. Otherwise the term will evaluate to
   False.
+- Implement short circuiting for "and" and "or" operators.
 
 0.3.0
 =====
