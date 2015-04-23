@@ -244,6 +244,21 @@ class TestExpression(unittest.TestCase):
         expression = Expression("len($a)")
         result = expression.evaluate({"a": "''''"})
         self.assertEqual(result, 4)
+    
+    def test_smaller(self):
+        expression = Expression("timedelta($a) < timedelta($b)")
+        result = expression.evaluate({"a": "00:45:00", "b": "01:00:00"})
+        self.assertEqual(result, True)
+
+    def test_equal(self):
+        expression = Expression("timedelta($a) == timedelta($b)")
+        result = expression.evaluate({"a": "01:30:00", "b": "00:90:00"})
+        self.assertEqual(result, True)
+
+    def test_sum_smaller(self):
+        expression = Expression("(timedelta($a) +  timedelta($b)) < timedelta($c)")
+        result = expression.evaluate({"a": "04:00:00", "b": "05:00:00", "c": "08:00:00"})
+        self.assertEqual(result, False)
 
     #def test_lenexpr(self):
     #    expression = Expression("len(($a + 'abc'))")

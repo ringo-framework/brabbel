@@ -1,6 +1,6 @@
 from __future__ import division
 from builtins import str
-from datetime import date
+from datetime import date, timedelta
 
 ########################################################################
 #                              Operators                               #
@@ -28,6 +28,15 @@ def _date(ds):
         m = int(ds[4:6])
         d = int(ds[6:8])
     return date(y, m, d)
+
+
+def _timedelta(s):
+    interval  = s.split(":")
+    hours = int(interval[0])
+    minutes = int(interval[1])
+    seconds = int(interval[2])
+    td = timedelta(hours=hours, minutes=minutes, seconds=seconds)
+    return td
 
 
 def _bool(v):

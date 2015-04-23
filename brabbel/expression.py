@@ -4,13 +4,14 @@ import logging
 import operator
 from pyparsing import ParseResults
 from brabbel.parser import Parser
-from brabbel.helpers import _in, _date, _bool, _len, _div
+from brabbel.helpers import _in, _date, _timedelta, _bool, _len, _div
 
 logging.basicConfig()
 log = logging.getLogger(__name__)
 
 functions = {
     "date": _date,
+    "timedelta": _timedelta,
     "bool": _bool,
     "len": _len
 }
