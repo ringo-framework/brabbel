@@ -239,16 +239,17 @@ class TestExpression(unittest.TestCase):
         result = expression.evaluate({"a": "xyz"})
         self.assertEqual(result, 'xyzabc')
 
-
     def test_len4ticks(self):
         expression = Expression("len($a)")
         result = expression.evaluate({"a": "''''"})
         self.assertEqual(result, 4)
-    
+
     def test_smaller(self):
-        expression = Expression("timedelta($a) < timedelta($b)")
-        result = expression.evaluate({"a": "00:45:00", "b": "01:00:00"})
-        self.assertEqual(result, True)
+        import datetime
+        expression = Expression("$a > timedelta($b)")
+        result = expression.evaluate({"a": datetime.timedelta(seconds=100),
+                                      "b": "00:00:120"})
+        self.assertEqual(result, False)
 
     def test_equal(self):
         expression = Expression("timedelta($a) == timedelta($b)")
@@ -257,13 +258,16 @@ class TestExpression(unittest.TestCase):
 
     def test_sum_smaller(self):
         expression = Expression("(timedelta($a) +  timedelta($b)) < timedelta($c)")
-        result = expression.evaluate({"a": "04:00:00", "b": "05:00:00", "c": "08:00:00"})
+        result = expression.evaluate({"a": "04:00:00",
+                                      "b": "05:00:00",
+                                      "c": "08:00:00"})
         self.assertEqual(result, False)
 
     #def test_lenexpr(self):
     #    expression = Expression("len(($a + 'abc'))")
     #    result = expression.evaluate({"a": "xyz"})
     #    self.assertEqual(result, 6)
+
 
 class TestReallife(unittest.TestCase):
     def test_1(self):
