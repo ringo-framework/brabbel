@@ -102,6 +102,11 @@ class Expression(object):
                 operand.append(self._evaluate(element, values))
             elif element in list(ops.keys()):
                 op = element
+                # Short curcuiting "and" and "or" opertator
+                if op == "and" and not bool(operand[0]):
+                    return False
+                if op == "or" and bool(operand[0]):
+                    return True
             elif element in list(functions.keys()):
                 func = functions[element]
             else:
