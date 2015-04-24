@@ -13,6 +13,7 @@ log = logging.getLogger(__name__)
 
 functions = {
     "date": _date,
+    "timedelta": _timedelta,
     "bool": _bool,
     "len": _len
 }

@@ -29,10 +29,6 @@ def _number(origString, loc, tokens):
         return float(tokens[0])
 
 
-def _str(origString, loc, tokens):
-    return unicode(tokens[0])
-
-
 def _make_list(element=""):
     """Returns a list element
 
@@ -59,7 +55,7 @@ number = Combine(Optional("-") + Word(nums + '.')).setParseAction(_number)
 # TODO: Remove "-" from list of allowed chars. Is only here for
 # compatibility. (None) <2014-10-28 14:04>
 variable = Combine("$" + Word(alphanums + "_" + "-" + "."))
-string = Combine(lquote.suppress() + Optional(Word(alphanums + "_" + " " + "-")) + rquote.suppress()).setParseAction(_str)
+string = Combine(lquote.suppress() + Optional(Word(alphanums + "_" + " " + "-" + ":")) + rquote.suppress())
 identifier = Word(alphas + "_")
 none = Literal("None").setParseAction(lambda t: False)
 true = Literal("True").setParseAction(lambda t: True)
