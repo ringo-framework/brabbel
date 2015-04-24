@@ -4,7 +4,7 @@ import logging
 import operator
 from pyparsing import ParseResults
 from brabbel.parser import Parser
-from brabbel.helpers import _in, _date, _bool, _len
+from brabbel.helpers import _in, _date, _bool, _len, _timedelta
 from brabbel.operators import Div
 
 
