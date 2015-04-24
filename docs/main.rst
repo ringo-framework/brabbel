@@ -90,9 +90,4 @@ Len
 
 timedelta
 ---------
-The timedelta function can be used for handling intervals in form of 
-"hh:mm:ss". 
-
-Examples::
-        timedelta('00:42:00') < timedelta('01:00:00')
-        timedelta('04:00:00') + timedelta('01:00:00') == timedelta('05:00:00')
+.. autofunction:: brabbel.helpers._timedelta
