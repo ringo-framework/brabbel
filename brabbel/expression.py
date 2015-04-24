@@ -50,7 +50,7 @@ def _evaluate_term(op, operand):
         else:
             # If the type of the operands are not the same, then raise
             # an expection.
-            raise Exception("Can not use operands '%s' on operator '%s'. "
+            raise TypeError("Can not use operands '%s' on operator '%s'. "
                             "Type of operands must be equal" 
                             % ((operand[0], type(operand[0]),
                                operand[1], type(operand[1])), op))
