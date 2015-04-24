@@ -19,3 +19,8 @@ class Div(Binary):
             return int(a / b)
         else:
             return a / b
+
+class In(Binary):
+
+    def eval(self, a, b):
+        return a in b
