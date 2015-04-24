@@ -2,6 +2,7 @@ from __future__ import division
 from builtins import str
 from datetime import date
 
+
 ########################################################################
 #                              Operators                               #
 ########################################################################
@@ -20,6 +21,17 @@ def _div(a, b):
 
 
 def _date(ds):
+    """Will convert a given string into a date object. The given date can have the following format:
+
+    today
+        Will generate to current date
+    YYYYMMDD
+        Will generate the date of year (YYYY) month (MM) day (DD)
+
+    :v: Value to be checked
+    :returns: Date object
+
+    """
     if ds in ["'today'", 'today']:
         return date.today()
     else:
@@ -31,12 +43,29 @@ def _date(ds):
 
 
 def _bool(v):
-    """Returns True if the given value v is set and not empty. Empty
-    means:
+    """Will check if the given value is set and not empty. Empty means:
 
-     * For String: No value or empty String
-     * For Lists: No value or empty Lists
-     * For Numbers: No value (0 is consideret as valid value)
+    * For String: No value or empty String
+    * For Lists: No value or empty Lists
+    * For Numbers: No value (0 is consideret as valid value)
+
+    :Examples:
+
+    >>> _bool(None)
+    False
+    >>> _bool('')
+    False
+    >>> _bool('  ')
+    True
+    >>> _bool([])
+    False
+    >>> _bool(0)
+    True
+    >>> _bool('foo')
+    True
+
+    :v: Value to be checked
+    :returns: True or False
 
     """
     if v is None:
@@ -60,6 +89,30 @@ def _bool(v):
 
 
 def _len(v):
-    if isinstance(v, float):
-        v = str(int(v))
-    return len(v)
+    """Will return of the given value. For all values except a list the
+    value will be converted into a string first and the length of the
+    string will be returned. In case of a None value the length will be
+    0.
+
+    :Examples:
+
+    >>> _len(1.0)
+    3
+    >>> _len(1234)
+    4
+    >>> _bool([1,2,3,4,5])
+    5
+    >>> _bool('')
+    0
+    >>> _bool(None)
+    0
+
+    :v: Value to be checked
+    :returns: True or False
+
+    """
+    if isinstance(v, list):
+        return len(v)
+    elif v is None:
+        return 0
+    return len(unicode(v))
