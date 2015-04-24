@@ -15,6 +15,7 @@ syntax: glob
 *.egg
 *.egg-info
 dist
+docs/_build
 build
 data
 eggs
