@@ -43,6 +43,17 @@ def _date(ds):
 
 
 def _timedelta(s):
+    """Will convert a given string into a timedelte object. The given
+    date can have the following format:
+
+    HH:MM:SS
+        Will generate the timedelta of hours (HH) minutes (MM) and
+        seconds (SS)
+
+    :v: Value to be checked
+    :returns: Timedelta object
+
+    """
     interval  = s.split(":")
     hours = int(interval[0])
     minutes = int(interval[1])
