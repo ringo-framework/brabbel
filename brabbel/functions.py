@@ -117,3 +117,10 @@ def _len(v):
     elif v is None:
         return 0
     return len(unicode(v))
+
+functions = {
+    "date": _date,
+    "timedelta": _timedelta,
+    "bool": _bool,
+    "len": _len
+}

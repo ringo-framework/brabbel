@@ -1,52 +1,27 @@
 from builtins import object
 import sys
 import logging
-import operator
 from pyparsing import ParseResults
 from brabbel.parser import Parser
-from brabbel.operators import Div, In
-from brabbel.functions import _date, _bool, _len, _timedelta
-
+from brabbel.operators import operators
+from brabbel.functions import functions
 
 
 logging.basicConfig()
 log = logging.getLogger(__name__)
-
-functions = {
-    "date": _date,
-    "timedelta": _timedelta,
-    "bool": _bool,
-    "len": _len
-}
-ops = {
-    "not": operator.not_,
-    "+": operator.add,
-    "-": operator.sub,
-    "*": operator.mul,
-    "/": Div().eval,
-    "<": operator.lt,
-    "<=": operator.le,
-    ">=": operator.ge,
-    ">": operator.gt,
-    "==": operator.eq,
-    "!=": operator.ne,
-    "and": operator.and_,
-    "or": operator.or_,
-    "in": In().eval
-}
 
 
 def _evaluate_term(op, operand):
         if op is None:
             return operand[0]
         elif op == "not":
-            return ops[op](operand[0])
+            return operators[op](operand[0])
         elif op == "in":
-            return ops[op](operand[0], operand[1])
+            return operators[op](operand[0], operand[1])
         elif type(operand[0]) == type(operand[1]):
             # Only evalutate the term if both operators of the operand are
             # of the same type.
-            return ops[op](operand[0], operand[1])
+            return operators[op](operand[0], operand[1])
         else:
             # If the type of the operands are not the same, then raise
             # an expection.
@@ -105,7 +80,7 @@ class Expression(object):
                 func = None
             elif isinstance(element, ParseResults):
                 operand.append(self._evaluate(element, values))
-            elif element in list(ops.keys()):
+            elif element in list(operators.keys()):
                 op = element
             elif element in list(functions.keys()):
                 func = functions[element]
