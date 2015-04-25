@@ -77,17 +77,16 @@ Functions
 
 Bool
 ----
-.. autofunction:: brabbel.helpers._bool
-
+.. autofunction:: brabbel.functions._bool
 
 Date
 ----
-.. autofunction:: brabbel.helpers._date
+.. autofunction:: brabbel.functions._date
 
 Len
 ---
-.. autofunction:: brabbel.helpers._len
+.. autofunction:: brabbel.functions._len
 
-timedelta
+Timedelta
 ---------
-.. autofunction:: brabbel.helpers._timedelta
+.. autofunction:: brabbel.functions._timedelta
