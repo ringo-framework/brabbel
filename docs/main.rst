@@ -90,3 +90,10 @@ Len
 Timedelta
 ---------
 .. autofunction:: brabbel.functions._timedelta
+
+Brabbel Pitfalls
+================
+Brabbel is not perfect. There are a number things where the Language
+might not behave as expected. This can become a pitfall in some cases so
+this section will list some of them. If you know more please write me an
+Email so I can add these here.
