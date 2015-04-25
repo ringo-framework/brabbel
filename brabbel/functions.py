@@ -97,11 +97,11 @@ def _len(v):
     3
     >>> _len(1234)
     4
-    >>> _bool([1,2,3,4,5])
+    >>> _len([1,2,3,4,5])
     5
-    >>> _bool('')
+    >>> _len('')
     0
-    >>> _bool(None)
+    >>> _len(None)
     0
 
     :v: Value to be checked
