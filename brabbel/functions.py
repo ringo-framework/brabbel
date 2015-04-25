@@ -50,8 +50,6 @@ def _bool(v):
     * For Lists: No value or empty Lists
     * For Numbers: No value (0 is consideret as valid value)
 
-    :Examples:
-
     >>> _bool(None)
     False
     >>> _bool('')
@@ -94,8 +92,6 @@ def _len(v):
     value will be converted into a string first and the length of the
     string will be returned. In case of a None value the length will be
     0.
-
-    :Examples:
 
     >>> _len(1.0)
     3
