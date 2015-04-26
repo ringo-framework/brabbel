@@ -142,46 +142,62 @@ The following operators are supported:
 
 And
 ---
+.. autofunction:: operator.and_
 
 Or
 --
+.. autofunction:: operator.or_
 
 Not
 ---
+.. autofunction:: operator.not_
 
 ==
 --
+.. autofunction:: operator.eq
 
 !=
 --
+.. autofunction:: operator.ne
 
 >
 --
+.. autofunction:: operator.lt
 
 
 >=
 --
+.. autofunction:: operator.le
 
 <
 --
+.. autofunction:: operator.lt
 
 <=
 --
+.. autofunction:: operator.le
 
 \+
 --
+.. autofunction:: operator.add
 
 \-
 --
+.. autofunction:: operator.sub
 
 \*
 --
+.. autofunction:: operator.mul
 
 \/
 --
+.. autoclass:: brabbel.operators.Div
+   :inherited-members:
 
 In
 --
+.. autoclass:: brabbel.operators.In
+   :inherited-members:
 
 
 Functions

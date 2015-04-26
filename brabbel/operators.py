@@ -14,16 +14,21 @@ class Unary(Operator):
     """Baseclass for Unary operators"""
 
 class Div(Binary):
+    """Devision operator"""
 
     def eval(self, a, b):
+        """Divided a with b. In case a nd b are integer values return a
+        integer values. Otherwise a float value will be returned"""
         if isinstance(b, int):
             return int(a / b)
         else:
             return a / b
 
 class In(Binary):
+    """In operator"""
 
     def eval(self, a, b):
+        """Returns true if a is in list b"""
         return a in b
 
 operators = {
