@@ -70,27 +70,31 @@ class Expression(object):
         operand = []
         op = None
         func = None
-        for element in tree:
-            if func:
-                param = element[0]
-                if isinstance(param, str) and param.startswith("$"):
-                    param = _resolve_variable(param, values)
-                result = func(param)
-                operand.append(result)
-                func = None
-            elif isinstance(element, ParseResults):
-                operand.append(self._evaluate(element, values))
-            elif element in list(operators.keys()):
-                op = element
-            elif element in list(functions.keys()):
-                func = functions[element]
-            else:
-                if isinstance(element, str) and element.startswith("$"):
-                    element = _resolve_variable(element, values)
-                operand.append(element)
+        try:
+            for element in tree:
+                if func:
+                    param = element[0]
+                    if isinstance(param, str) and param.startswith("$"):
+                        param = _resolve_variable(param, values)
+                    result = func(param)
+                    operand.append(result)
+                    func = None
+                elif isinstance(element, ParseResults):
+                    operand.append(self._evaluate(element, values))
+                elif element in list(operators.keys()):
+                    op = element
+                elif element in list(functions.keys()):
+                    func = functions[element]
+                else:
+                    if isinstance(element, str) and element.startswith("$"):
+                        element = _resolve_variable(element, values)
+                    operand.append(element)
 
-            # Preevaluate here and use the result as the first operand.
-            if len(operand) == 2:
-                operand = [_evaluate_term(op, operand)]
-                op = None
-        return _evaluate_term(op, operand)
+                # Preevaluate here and use the result as the first operand.
+                if len(operand) == 2:
+                    operand = [_evaluate_term(op, operand)]
+                    op = None
+            return _evaluate_term(op, operand)
+        except:
+            log.error("Can not evaluate expression '%s'" % self._expression)
+            raise
