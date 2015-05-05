@@ -1,5 +1,4 @@
 from builtins import object
-import sys
 import logging
 from pyparsing import ParseResults
 from brabbel.parser import Parser
@@ -26,9 +25,10 @@ def _evaluate_term(op, operand):
             # If the type of the operands are not the same, then raise
             # an expection.
             raise TypeError("Can not use operands '%s' on operator '%s'. "
-                            "Type of operands must be equal" 
+                            "Type of operands must be equal"
                             % ((operand[0], type(operand[0]),
                                operand[1], type(operand[1])), op))
+
 
 def _resolve_variable(key, values):
     try:
@@ -38,7 +38,6 @@ def _resolve_variable(key, values):
                     % key.strip("$"))
         value = None
     return value
-
 
 
 class Expression(object):
