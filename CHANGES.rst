@@ -4,6 +4,7 @@
   valid of operators of the same type. Otherwise the term will evaluate to
   False.
 - Implement short circuiting for "and" and "or" operators.
+- Support "True","False","None" in bool function.
 
 0.3.0
 =====
