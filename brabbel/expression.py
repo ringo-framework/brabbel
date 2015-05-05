@@ -10,6 +10,10 @@ logging.basicConfig()
 log = logging.getLogger(__name__)
 
 
+class OperandMissmatchError(TypeError):
+    pass
+
+
 def _evaluate_term(op, operand):
         if op is None:
             return operand[0]
@@ -24,10 +28,11 @@ def _evaluate_term(op, operand):
         else:
             # If the type of the operands are not the same, then raise
             # an expection.
-            raise TypeError("Can not use operands '%s' on operator '%s'. "
-                            "Type of operands must be equal"
-                            % ((operand[0], type(operand[0]),
-                               operand[1], type(operand[1])), op))
+            msg = ("Can not use operands '%s' on operator '%s'. "
+                   "Type of operands must be equal"
+                   % ((operand[0], type(operand[0]),
+                      operand[1], type(operand[1])), op))
+            raise OperandMissmatchError(msg)
 
 
 def _resolve_variable(key, values):
@@ -99,6 +104,11 @@ class Expression(object):
                     operand = [_evaluate_term(op, operand)]
                     op = None
             return _evaluate_term(op, operand)
+        except OperandMissmatchError as ex:
+            log.error("Can not evaluate expression '%s': %s"
+                      % (self._expression, ex.message))
+            raise
         except:
-            log.error("Can not evaluate expression '%s'" % self._expression)
+            log.exception("Can not evaluate expression '%s'"
+                          % self._expression)
             raise
