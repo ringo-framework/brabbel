@@ -52,6 +52,10 @@ def _bool(v):
 
     >>> _bool(None)
     False
+    >>> _bool(False)
+    False
+    >>> _bool(True)
+    True
     >>> _bool('')
     False
     >>> _bool('  ')
@@ -69,6 +73,8 @@ def _bool(v):
     """
     if v is None:
         return False
+    if isinstance(v, bool):
+        return v
     if isinstance(v, str):
         if v == "''":
             return False
