@@ -3,7 +3,7 @@ from builtins import object
 from pyparsing import (
     ParserElement,
     Literal, Word,
-    Combine, Group, oneOf, ZeroOrMore, Optional,
+    Combine, Group, Optional,
     nums, alphanums, alphas,
     delimitedList,
     operatorPrecedence, opAssoc)
@@ -21,6 +21,7 @@ ParserElement.enablePackrat()
 ########################################################################
 #                               Helpers                                #
 ########################################################################
+
 
 def _str(origString, loc, tokens):
     return unicode(tokens[0])
@@ -64,7 +65,7 @@ identifier = Word(alphas + "_")
 none = Literal("None").setParseAction(lambda t: False)
 true = Literal("True").setParseAction(lambda t: True)
 false = Literal("False").setParseAction(lambda t: False)
-listing = lbr.suppress() + delimitedList(Optional(string|number)).setParseAction(_make_list) + rbr.suppress()
+listing = lbr.suppress() + delimitedList(Optional(string | number)).setParseAction(_make_list) + rbr.suppress()
 function = identifier.setResultsName("name") + lpar.suppress() + Group(Optional(delimitedList(number | string | variable | listing | true | false | none))) + rpar.suppress()
 atom = listing | number | string | variable | true | false | none | function
 
@@ -111,7 +112,7 @@ bnf = operatorPrecedence(atom,
                           (o_and, 2, opAssoc.LEFT),
                           (o_or, 2, opAssoc.LEFT),
                           (o_in, 2, opAssoc.LEFT),
-                         ])
+                          ])
 
 
 class Parser(object):
@@ -121,7 +122,6 @@ class Parser(object):
     def __init__(self):
         """@todo: to be defined1. """
         pass
-
 
     def parse(self, expr):
         """Returns the BNF-Tree of the given expression
@@ -135,5 +135,5 @@ class Parser(object):
             expr = expr.replace(op, opmapping[op])
         try:
             return bnf.parseString(expr)
-        except Exception as ex:
+        except Exception:
             log.exception("Error on parsing %s" % expr)
