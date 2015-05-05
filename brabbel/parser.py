@@ -65,7 +65,7 @@ none = Literal("None").setParseAction(lambda t: False)
 true = Literal("True").setParseAction(lambda t: True)
 false = Literal("False").setParseAction(lambda t: False)
 listing = lbr.suppress() + delimitedList(Optional(string|number)).setParseAction(_make_list) + rbr.suppress()
-function = identifier.setResultsName("name") + lpar.suppress() + Group(Optional(delimitedList(number | string | variable | listing))) + rpar.suppress()
+function = identifier.setResultsName("name") + lpar.suppress() + Group(Optional(delimitedList(number | string | variable | listing | true | false | none))) + rpar.suppress()
 atom = listing | number | string | variable | true | false | none | function
 
 ########################################################################
