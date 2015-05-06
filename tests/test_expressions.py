@@ -306,3 +306,13 @@ class TestReallife(unittest.TestCase):
         expression = Expression("( 'LOP-PM' in ['admins'] ) or ( 'False' == 'True' )")
         result = expression.evaluate({})
         self.assertEqual(result, False)
+
+    def test_7(self):
+        expression = Expression("bool($x) and ($x == 0)")
+        result = expression.evaluate({'x': None})
+        self.assertEqual(result, False)
+
+    def test_8(self):
+        expression = Expression("bool($x) and ($x == 1)")
+        result = expression.evaluate({'x': 0})
+        self.assertEqual(result, False)
