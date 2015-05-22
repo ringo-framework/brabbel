@@ -72,7 +72,6 @@ setup(
     # You can install these using the following syntax, for example:
     # $ pip install -e .[dev,test]
     extras_require = {
-        'test': ['coverage', 'nosetests'],
     },
 
     # If there are data files included in your packages that need to be
