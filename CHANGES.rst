@@ -1,10 +1,12 @@
-0.3.1
+0.4.0
 =====
-- Make comparison of operators more typesafe. Evaluation of terms is only
+- Make comparison of operators more type safe. Evaluation of terms is only
   valid of operators of the same type. Otherwise the term will evaluate to
   False.
 - Implement short circuiting for "and" and "or" operators.
 - Support "True","False","None" in bool function.
+- Refactored code. Created own module for operators and functions.
+- Added documentation.
 
 0.3.0
 =====
