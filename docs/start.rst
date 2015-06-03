@@ -34,9 +34,9 @@ Here is a short example on how to use brabbel::
         expr.evaluate(values)
         -> True
 
-Licence
+License
 =======
-Formbar is licensed with under the GNU general public license version 2.
+Brabbel is licensed with under the GNU General Public License version >= 2.
 
 
 Authors
