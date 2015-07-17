@@ -1,3 +1,9 @@
+0.4.1
+=====
+- Changed license from MIT to GPL v2+ and added LICENSE.txt
+- Added "bdist_rpm" section setup.cfg.
+- Added "egg_info" section setup.cfg.
+
 0.4.0
 =====
 - Make comparison of operators more type safe. Evaluation of terms is only
