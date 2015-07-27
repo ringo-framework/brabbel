@@ -58,6 +58,16 @@ class Expression(object):
         self._expression = expression
         self._expression_tree = Parser().parse(self._expression)
 
+        # Sometimes pyparsing's caching mechanism will break down under heavy load.
+        # Simply parsing the expression again seems to solve the problem, here we try
+        # it five times just to be on the save side 
+        for i in range(1, 6):
+            if self._expression_tree is None:
+                log.error('self._expression_tree is None! Parsing it again... Try {0} of 5'.format(i))
+                self._expression_tree = Parser().parse(self._expression)
+            else:
+                break
+
     def evaluate(self, values=None):
         """Returns the result auf the evaluation of the expression.
 
