@@ -1,3 +1,8 @@
+0.4.2
+=====
+- Added workaround for failing parsing of expressions when pyparsing is under
+  high load.
+
 0.4.1
 =====
 - Changed license from MIT to GPL v2+ and added LICENSE.txt
