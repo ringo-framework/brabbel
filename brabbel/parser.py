@@ -4,9 +4,10 @@ from pyparsing import (
     ParserElement,
     Literal, Word,
     Combine, Group, Optional,
-    nums, alphanums, alphas,
+    nums, alphanums, alphas, sglQuotedString,
     delimitedList,
-    operatorPrecedence, opAssoc)
+    operatorPrecedence, opAssoc,
+    removeQuotes)
 
 
 """
@@ -60,7 +61,9 @@ number = Combine(Optional("-") + Word(nums + '.')).setParseAction(_number)
 # TODO: Remove "-" from list of allowed chars. Is only here for
 # compatibility. (None) <2014-10-28 14:04>
 variable = Combine("$" + Word(alphanums + "_" + "-" + "."))
-string = Combine(lquote.suppress() + Optional(Word(alphanums + "_" + " " + "-" + ":")) + rquote.suppress()).setParseAction(_str)
+# FIXME: sglquotedstring will fail if the string contains a single
+# quote. (ti) <2015-09-29 13:54>
+string = sglQuotedString.setParseAction(removeQuotes)
 identifier = Word(alphas + "_")
 none = Literal("None").setParseAction(lambda t: False)
 true = Literal("True").setParseAction(lambda t: True)

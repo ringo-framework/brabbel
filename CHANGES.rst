@@ -1,6 +1,13 @@
 0.5.0
 =====
 
+0.4.3
+=====
+- Improved parsing single quoted strings. Now almost all chars are allowed
+  except a single quote "'" will will raise an execption because parsing
+  fails. Because the fix is a improvement at all and the remaining bug is is
+  currently considered as a rare corner case. This will be released anyway.
+
 0.4.2
 =====
 - Added workaround for failing parsing of expressions when pyparsing is under
