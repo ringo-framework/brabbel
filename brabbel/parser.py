@@ -6,8 +6,7 @@ from pyparsing import (
     Combine, Group, Optional,
     nums, alphanums, alphas, sglQuotedString,
     delimitedList,
-    operatorPrecedence, opAssoc,
-    removeQuotes)
+    operatorPrecedence, opAssoc)
 
 
 """
@@ -25,7 +24,7 @@ ParserElement.enablePackrat()
 
 
 def _str(origString, loc, tokens):
-    return unicode(tokens[0])
+    return unicode(tokens[0]).strip("'")
 
 
 def _number(origString, loc, tokens):
@@ -63,7 +62,7 @@ number = Combine(Optional("-") + Word(nums + '.')).setParseAction(_number)
 variable = Combine("$" + Word(alphanums + "_" + "-" + "."))
 # FIXME: sglquotedstring will fail if the string contains a single
 # quote. (ti) <2015-09-29 13:54>
-string = sglQuotedString.setParseAction(removeQuotes)
+string = sglQuotedString.setParseAction(_str)
 identifier = Word(alphas + "_")
 none = Literal("None").setParseAction(lambda t: False)
 true = Literal("True").setParseAction(lambda t: True)
