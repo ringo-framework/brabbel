@@ -65,7 +65,7 @@ setup(
     # project is installed. For an analysis of "install_requires" vs pip's
     # requirements files see:
     # https://packaging.python.org/en/latest/technical.html#install-requires-vs-requirements-files
-    install_requires=['pyparsing', 'future'],
+    install_requires=['pyparsing==2.0.3', 'future'],
 
 
     # List additional groups of dependencies here (e.g. development dependencies).
