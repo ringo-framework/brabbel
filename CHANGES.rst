@@ -1,5 +1,7 @@
 0.5.0
 =====
+- Added float function to cast value to float. Used to make comparisions
+  between float and int possible.
 
 0.4.3
 =====
