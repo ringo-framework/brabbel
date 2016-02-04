@@ -1,4 +1,5 @@
 import logging
+from threading import Lock
 from builtins import object
 from pyparsing import (
     ParserElement,
@@ -121,6 +122,8 @@ class Parser(object):
 
     """Parser class for python expression."""
 
+    lock = Lock()
+
     def __init__(self):
         """@todo: to be defined1. """
         pass
@@ -136,6 +139,7 @@ class Parser(object):
         for op in opmapping:
             expr = expr.replace(op, opmapping[op])
         try:
-            return bnf.parseString(expr)
+            with Parser.lock:
+                return bnf.parseString(expr)
         except Exception:
             log.exception("Error on parsing %s" % expr)
