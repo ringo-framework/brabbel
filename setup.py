@@ -23,7 +23,7 @@ setup(
     long_description=long_description,
 
     # The project's main homepage.
-    url='https://bitbucket.org/ti/brabbel',
+    url='https://github.com/ringo-framework/brabbel',
 
     # Author details
     author='Torsten Irlaender',
