@@ -94,6 +94,8 @@ def _bool(v):
 
 def _float(v):
     """Will return the float value of the given value"""
+    if v is None:
+        return v
     return float(v)
 
 def _len(v):
