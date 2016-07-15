@@ -76,7 +76,7 @@ class Expression(object):
             for element in tree:
                 if func:
                     param = element[0]
-                    if isinstance(param, str) and param.startswith("$"):
+                    if isinstance(param, (str, unicode)) and param.startswith("$"):
                         param = _resolve_variable(param, values)
                     result = func(param)
                     operand.append(result)
@@ -93,7 +93,7 @@ class Expression(object):
                 elif element in list(functions.keys()):
                     func = functions[element]
                 else:
-                    if isinstance(element, str) and element.startswith("$"):
+                    if isinstance(element, (str, unicode)) and element.startswith("$"):
                         element = _resolve_variable(element, values)
                     operand.append(element)
 
