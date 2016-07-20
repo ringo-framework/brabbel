@@ -4,6 +4,9 @@
 
 0.5.0
 =====
+Inofficial release! Has only been internally tagged as 0.5.0. Not actually
+released on upstream.
+
 - Use Lock on Parser when parsing an expression to prevent hickups of the
   parser resulting an exceptions.
 
