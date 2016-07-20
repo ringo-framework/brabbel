@@ -1,5 +1,16 @@
+0.5.1
+=====
+- Fixed unicode error.
+
 0.5.0
 =====
+- Use Lock on Parser when parsing an expression to prevent hickups of the
+  parser resulting an exceptions.
+
+0.4.4
+=====
+- Added float function to cast value to float. Used to make comparisions
+  between float and int possible.
 
 0.4.3
 =====

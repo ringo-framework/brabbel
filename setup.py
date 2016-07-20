@@ -23,7 +23,7 @@ setup(
     long_description=long_description,
 
     # The project's main homepage.
-    url='https://bitbucket.org/ti/brabbel',
+    url='https://github.com/ringo-framework/brabbel',
 
     # Author details
     author='Torsten Irlaender',
@@ -65,7 +65,7 @@ setup(
     # project is installed. For an analysis of "install_requires" vs pip's
     # requirements files see:
     # https://packaging.python.org/en/latest/technical.html#install-requires-vs-requirements-files
-    install_requires=['pyparsing<=2.0.3', 'future'],
+    install_requires=['pyparsing', 'future'],
 
 
     # List additional groups of dependencies here (e.g. development dependencies).

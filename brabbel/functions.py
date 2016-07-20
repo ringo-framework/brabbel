@@ -92,6 +92,11 @@ def _bool(v):
     else:
         return bool(str(v))
 
+def _float(v):
+    """Will return the float value of the given value"""
+    if v is None:
+        return v
+    return float(v)
 
 def _len(v):
     """Will return of the given value. For all values except a list the
@@ -124,5 +129,6 @@ functions = {
     "date": _date,
     "timedelta": _timedelta,
     "bool": _bool,
-    "len": _len
+    "len": _len,
+    "float": _float
 }
