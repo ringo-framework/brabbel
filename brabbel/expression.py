@@ -8,6 +8,7 @@ from brabbel.functions import functions
 logging.basicConfig()
 log = logging.getLogger(__name__)
 
+from threading import Lock
 
 class OperandMissmatchError(TypeError):
     pass
@@ -46,6 +47,9 @@ def _resolve_variable(key, values):
 
 class Expression(object):
 
+    lock = Lock()
+    cache = {}
+
     """Docstring for Expression. """
     def __init__(self, expression):
         """Initialise a Expression object
@@ -53,8 +57,15 @@ class Expression(object):
         :expression: String representation of an Expression
 
         """
+        with Expression.lock:
+            try:
+                tree = Expression.cache[expression]
+            except KeyError:
+                tree = Parser().parse(expression)
+                Expression.cache[expression] = tree
+
         self._expression = expression
-        self._expression_tree = Parser().parse(self._expression)
+        self._expression_tree = tree
 
     def evaluate(self, values=None):
         """Returns the result auf the evaluation of the expression.
