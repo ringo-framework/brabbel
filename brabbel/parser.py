@@ -141,5 +141,4 @@ class Parser(object):
             with Parser.lock:
                 return infix.parseString(expr)
         except Exception:
-            print "Error:", expr
             log.exception("Error on parsing %s" % expr)
