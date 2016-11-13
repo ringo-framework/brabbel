@@ -136,7 +136,7 @@ class TestOperator(unittest.TestCase):
 
     def test_gtstring(self):
         result = self.parser.parse("'foo and bar' lt 'baz'")[0]
-        want = Binary(operators['<'],
+        want = Binary(operators['lt'],
             Const('foo and bar'),
             Const('baz'))
         self.assertEqual(result, want)
