@@ -42,8 +42,11 @@ class Expression(object):
         """
         if values is None:
             values = {}
+        return self._evaluate(self._expression_tree, values)
+
+    def _evaluate(self, tree, values):
         try:
-            return self._expression_tree.evaluate(values)
+            return tree.evaluate(values)
         except:
             log.exception("Can not evaluate expression '%s'"
                           % self._expression)
