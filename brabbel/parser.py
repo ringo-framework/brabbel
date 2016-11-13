@@ -1,13 +1,20 @@
 import logging
 from threading import Lock
 from builtins import object
+
 from pyparsing import (
     ParserElement,
+    Forward,
     Literal, Word,
     Combine, Group, Optional,
     nums, alphanums, alphas, sglQuotedString,
     delimitedList,
-    operatorPrecedence, opAssoc)
+    opAssoc, infixNotation, oneOf)
+
+from brabbel.operators import operators
+from brabbel.functions import functions
+from brabbel.nodes import (
+    Const, Func, Variable, Binary, Unary, List)
 
 
 """
@@ -24,29 +31,43 @@ ParserElement.enablePackrat()
 ########################################################################
 
 
-def _str(origString, loc, tokens):
-    return unicode(tokens[0]).strip("'")
+def _str(s):
+    return unicode(s.strip("'"))
 
 
-def _number(origString, loc, tokens):
+def _number(s):
     try:
-        return int(tokens[0])
-    except:
-        return float(tokens[0])
+        return int(s)
+    except ValueError:
+        return float(s)
 
 
-def _make_list(element=""):
-    """Returns a list element
+def _make_func(s, loc, toks):
+    name = toks['name']
+    args = toks['args']
+    return Func(functions[name], args[:])
 
-    :element: Parsed element as a string representation of a list
-    :returns: List element
+def _make_binary(s, loc, toks):
 
-    """
-    listing = []
-    for e in element:
-        listing.append(e)
-    return [listing]
+    toks = toks[0]
+    a, op, b = toks[0], toks[1], toks[2]
 
+    a = Binary(operators[op], a, b)
+
+    remaining = iter(toks[3:])
+    while True:
+        op = next(remaining, None)
+        if op is None:
+            break
+        b = next(remaining)
+        a = Binary(operators[op], a, b)
+
+    return a
+
+def _make_unary(s, loc, toks):
+
+    toks = toks[0]
+    return Unary(operators[toks[0]], toks[1])
 
 ########################################################################
 #                                ATOMS                                 #
@@ -57,66 +78,47 @@ rpar = Literal(")")
 rbr = Literal("]")
 lquote = Literal("'")
 rquote = Literal("'")
-number = Combine(Optional("-") + Word(nums + '.')).setParseAction(_number)
+number = Combine(Optional("-") + Word(nums + '.'))
 # TODO: Remove "-" from list of allowed chars. Is only here for
 # compatibility. (None) <2014-10-28 14:04>
 variable = Combine("$" + Word(alphanums + "_" + "-" + "."))
 # FIXME: sglquotedstring will fail if the string contains a single
 # quote. (ti) <2015-09-29 13:54>
-string = sglQuotedString.setParseAction(_str)
+string = sglQuotedString.copy()
 identifier = Word(alphas + "_")
-none = Literal("None").setParseAction(lambda t: False)
-true = Literal("True").setParseAction(lambda t: True)
-false = Literal("False").setParseAction(lambda t: False)
-listing = lbr.suppress() + delimitedList(Optional(string | number)).setParseAction(_make_list) + rbr.suppress()
-function = identifier.setResultsName("name") + lpar.suppress() + Group(Optional(delimitedList(number | string | variable | listing | true | false | none))) + rpar.suppress()
-atom = listing | number | string | variable | true | false | none | function
+none = Literal("None")
+true = Literal("True")
+false = Literal("False")
+atom = Forward()
+infix = infixNotation(atom,
+    [
+    ('not', 1, opAssoc.RIGHT, _make_unary),
+    (oneOf('* /'), 2, opAssoc.LEFT, _make_binary),
+    (oneOf('+ -'), 2, opAssoc.LEFT, _make_binary),
+    (oneOf('> gt >= ge < lt <= le != ne == eq'),
+        2, opAssoc.LEFT, _make_binary),
+    ('and', 2, opAssoc.LEFT, _make_binary),
+    ('or', 2, opAssoc.LEFT, _make_binary),
+    ('in', 2, opAssoc.LEFT, _make_binary),
+    ])
+dellist = delimitedList(Optional(atom))
+listing = lbr.suppress() + dellist + rbr.suppress()
+function = identifier.setResultsName('name') + lpar.suppress() + Group(
+        Optional(delimitedList(atom))).setResultsName("args") + rpar.suppress()
+atom <<= listing | number | string | variable | true | false | none | function
 
-########################################################################
-#                              Operators                               #
-########################################################################
+_false = Const(False)
+_true = Const(True)
 
-opmapping = {
-    " ge ": " >= ",
-    " gt ": " > ",
-    " lt ": " < ",
-    " le ": " <= ",
-    " eq ": " == ",
-    " ne ": " != "
-}
-
-o_not = Literal("not")
-o_plus = Literal("+")
-o_minus = Literal("-")
-o_mul = Literal("*")
-o_div = Literal("/")
-o_gt = Literal(">")
-o_ge = Literal(">=")
-o_lt = Literal("<")
-o_le = Literal("<=")
-o_ne = Literal("!=")
-o_eq = Literal("==")
-o_and = Literal("and")
-o_or = Literal("or")
-o_in = Literal("in")
-
-bnf = operatorPrecedence(atom,
-                         [(o_not, 1, opAssoc.RIGHT),
-                          (o_mul, 2, opAssoc.LEFT),
-                          (o_div, 2, opAssoc.LEFT),
-                          (o_plus, 2, opAssoc.LEFT),
-                          (o_minus, 2, opAssoc.LEFT),
-                          (o_gt, 2, opAssoc.LEFT),
-                          (o_ge, 2, opAssoc.LEFT),
-                          (o_lt, 2, opAssoc.LEFT),
-                          (o_le, 2, opAssoc.LEFT),
-                          (o_ne, 2, opAssoc.LEFT),
-                          (o_eq, 2, opAssoc.LEFT),
-                          (o_and, 2, opAssoc.LEFT),
-                          (o_or, 2, opAssoc.LEFT),
-                          (o_in, 2, opAssoc.LEFT),
-                          ])
-
+number.setParseAction(lambda t: Const(_number(t[0])))
+variable.setParseAction(lambda t: Variable(t[0].strip("$")))
+string.setParseAction(lambda t: Const(_str(t[0])))
+none.setParseAction(lambda t: _false)
+false.setParseAction(lambda t: _false)
+true.setParseAction(lambda t: _true)
+dellist.setParseAction(lambda s, l, t: List(t[:]))
+function.setParseAction(_make_func)
+atom.setParseAction(lambda s, l, t: t[0])
 
 class Parser(object):
 
@@ -135,11 +137,9 @@ class Parser(object):
         :returns: Returns the parsed BNF form the the expression
 
         """
-        # Replace operators like gt, lt...
-        for op in opmapping:
-            expr = expr.replace(op, opmapping[op])
         try:
             with Parser.lock:
-                return bnf.parseString(expr)
+                return infix.parseString(expr)
         except Exception:
+            print "Error:", expr
             log.exception("Error on parsing %s" % expr)

@@ -1,49 +1,35 @@
-from __future__ import division
 import operator
 
-class Operator(object):
-    """Baseclass for all operators"""
+def _div(a, b):
+    """Divided a with b. In case a nd b are integer values return a
+    integer values. Otherwise a float value will be returned"""
+    if isinstance(b, int):
+        return int(a / b)
+    return a / b
 
-    def eval(self):
-        raise NotImplementedError()
-
-class Binary(Operator):
-    """Baseclass for Binary operators"""
-
-class Unary(Operator):
-    """Baseclass for Unary operators"""
-
-class Div(Binary):
-    """Devision operator"""
-
-    def eval(self, a, b):
-        """Divided a with b. In case a nd b are integer values return a
-        integer values. Otherwise a float value will be returned"""
-        if isinstance(b, int):
-            return int(a / b)
-        else:
-            return a / b
-
-class In(Binary):
-    """In operator"""
-
-    def eval(self, a, b):
-        """Returns true if a is in list b"""
-        return a in b
+def _in(a, b):
+    """Returns true if a is in list b"""
+    return a in b
 
 operators = {
     "not": operator.not_,
     "+": operator.add,
     "-": operator.sub,
     "*": operator.mul,
-    "/": Div().eval,
+    "/": _div,
     "<": operator.lt,
+    "lt": operator.lt,
     "<=": operator.le,
+    "le": operator.le,
     ">=": operator.ge,
+    "ge": operator.ge,
     ">": operator.gt,
+    "gt": operator.gt,
     "==": operator.eq,
+    "eq": operator.eq,
     "!=": operator.ne,
+    "ne": operator.ne,
     "and": operator.and_,
     "or": operator.or_,
-    "in": In().eval
+    "in": _in,
 }
