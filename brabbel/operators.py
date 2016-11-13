@@ -13,7 +13,7 @@ def _in(a, b):
 
 def _none_save(op):
     def fn(a, b):
-        return None if a is None or b is None else op(a, b)
+        return False if a is None or b is None else op(a, b)
     return fn
 
 operators = {
@@ -30,11 +30,11 @@ operators = {
     "ge": _none_save(operator.ge),
     ">": _none_save(operator.gt),
     "gt": _none_save(operator.gt),
-    "==": operator.eq,
-    "eq": operator.eq,
-    "!=": operator.ne,
-    "ne": operator.ne,
-    "and": operator.and_,
-    "or": operator.or_,
-    "in": _in,
+    "==": _none_save(operator.eq),
+    "eq": _none_save(operator.eq),
+    "!=": _none_save(operator.ne),
+    "ne": _none_save(operator.ne),
+    "and": _none_save(operator.and_),
+    "or": _none_save(operator.or_),
+    "in": _none_save(_in),
 }
