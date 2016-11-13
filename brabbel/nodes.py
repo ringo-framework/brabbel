@@ -20,6 +20,8 @@ class Binary(Node):
     def evaluate(self, ctx):
         return self.op(self.a.evaluate(ctx), self.b.evaluate(ctx))
 
+    def __eq__(self, other):
+        return self.op == other.op and self.a == other.a and self.b == other.b
 
 class Unary(Node):
     """Unary terms"""
@@ -31,6 +33,8 @@ class Unary(Node):
     def evaluate(self, ctx):
         return self.op(self.a.evaluate(ctx))
 
+    def __eq__(self, other):
+        return self.op == other.op and self.a == other.a
 
 class Const(Node):
     """Constant terms"""
@@ -40,6 +44,9 @@ class Const(Node):
 
     def evaluate(self, ctx):
         return self.a
+
+    def __eq__(self, other):
+        return self.a == other.a
 
 
 class Func(Node):
@@ -52,6 +59,9 @@ class Func(Node):
     def evaluate(self, ctx):
         return self.fn(*[a.evaluate(ctx) for a in self.args])
 
+    def __eq__(self, other):
+        return self.fn == other.fn and self.args == other.args
+
 
 class List(Node):
     """List terms"""
@@ -62,6 +72,8 @@ class List(Node):
     def evaluate(self, ctx):
         return [a.evaluate(ctx) for a in self.l]
 
+    def __eq__(self, other):
+        return self.l == other.l
 
 class Variable(Node):
     """Variable terms"""
@@ -77,3 +89,6 @@ class Variable(Node):
                         % self.var)
             value = None
         return value
+
+    def __eq__(self, other):
+        return self.var == other.var
