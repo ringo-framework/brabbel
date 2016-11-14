@@ -3,7 +3,7 @@ from brabbel.parser import Parser
 from brabbel.operators import operators
 from brabbel.functions import functions
 from brabbel.nodes import (
-    Const, Variable, List, Func, Unary, Binary, List, And, Or, Not)
+    Const, Variable, List, Unary, Binary, List, And, Or, Not)
 
 
 class TestAtom(unittest.TestCase):
@@ -196,22 +196,22 @@ class TestOperator(unittest.TestCase):
 
     def test_date_date(self):
         result = self.parser.parse("date('20000101')")[0]
-        want = Func(functions['date'], [Const('20000101')])
+        want = Unary(functions['date'], Const('20000101'))
         self.assertEqual(result, want)
 
     def test_date_today(self):
         result = self.parser.parse("date('today')")[0]
-        want = Func(functions['date'], [Const('today')])
+        want = Unary(functions['date'], Const('today'))
         self.assertEqual(result, want)
 
     def test_varlttoday(self):
         result = self.parser.parse("$xxx < date('today')")[0]
         want = Binary(operators['<'],
             Variable("xxx"),
-            Func(functions['date'], [Const('today')]))
+            Unary(functions['date'], Const('today')))
         self.assertEqual(result, want)
 
     def test_bool(self):
         result = self.parser.parse("bool(1)")[0]
-        want = Func(functions['bool'], [Const(1)])
+        want = Unary(functions['bool'], Const(1))
         self.assertEqual(result, want)

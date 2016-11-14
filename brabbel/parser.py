@@ -45,7 +45,13 @@ def _number(s):
 def _make_func(s, loc, toks):
     name = toks['name']
     args = toks['args']
-    return Func(functions[name], args[:])
+    fn = functions[name]
+    arity = len(args)
+    if arity == 1:
+        return Unary(fn, args[0])
+    if arity == 2:
+        return Binary(fn, args[0], args[1])
+    return Func(fn, args[:])
 
 def _make_binary(create = lambda op, a, b: Binary(op, a, b)):
     def make(s, loc, toks):
