@@ -48,6 +48,7 @@ class Not(Node):
     def __eq__(self, other):
         return self.a == other.a
 
+
 class And(Node):
     """Optimized 'and' terms"""
 
@@ -62,6 +63,7 @@ class And(Node):
     def __eq__(self, other):
         return self.a == other.a and self.b == other.b
 
+
 class Or(Node):
     """Optimized 'or' terms"""
 
@@ -75,6 +77,7 @@ class Or(Node):
 
     def __eq__(self, other):
         return self.a == other.a and self.b == other.b
+
 
 class Const(Node):
     """Constant terms"""
