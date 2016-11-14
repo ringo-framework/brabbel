@@ -36,6 +36,46 @@ class Unary(Node):
     def __eq__(self, other):
         return self.op == other.op and self.a == other.a
 
+class Not(Node):
+    """Optimized 'not' terms"""
+
+    def __init__(self, a):
+        self.a = a
+
+    def evaluate(self, ctx):
+        return not self.a.evaluate(ctx)
+
+    def __eq__(self, other):
+        return self.a == other.a
+
+class And(Node):
+    """Optimized 'and' terms"""
+
+    def __init__(self, a, b):
+        self.a = a
+        self.b = b
+
+    def evaluate(self, ctx):
+        # Short eval
+        return self.a.evaluate(ctx) and self.b.evaluate(ctx)
+
+    def __eq__(self, other):
+        return self.a == other.a and self.b == other.b
+
+class Or(Node):
+    """Optimized 'or' terms"""
+
+    def __init__(self, a, b):
+        self.a = a
+        self.b = b
+
+    def evaluate(self, ctx):
+        # Short eval
+        return self.a.evaluate(ctx) or self.b.evaluate(ctx)
+
+    def __eq__(self, other):
+        return self.a == other.a and self.b == other.b
+
 class Const(Node):
     """Constant terms"""
 

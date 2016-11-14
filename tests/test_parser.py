@@ -3,7 +3,7 @@ from brabbel.parser import Parser
 from brabbel.operators import operators
 from brabbel.functions import functions
 from brabbel.nodes import (
-    Const, Variable, List, Func, Unary, Binary, List)
+    Const, Variable, List, Func, Unary, Binary, List, And, Or, Not)
 
 
 class TestAtom(unittest.TestCase):
@@ -48,27 +48,27 @@ class TestOperator(unittest.TestCase):
 
     def test_not_number(self):
         result = self.parser.parse("not 123")[0]
-        want = Unary(operators['not'], Const(123))
+        want = Not(Const(123))
         self.assertEqual(result, want)
 
     def test_not_string(self):
         result = self.parser.parse("not 'xyz'")[0]
-        want = Unary(operators['not'], Const("xyz"))
+        want = Not(Const("xyz"))
         self.assertEqual(result, want)
 
     def test_not_var(self):
         result = self.parser.parse("not $xyz")[0]
-        want = Unary(operators['not'], Variable("xyz"))
+        want = Not(Variable("xyz"))
         self.assertEqual(result, want)
 
     def test_not_true(self):
         result = self.parser.parse("not True")[0]
-        want = Unary(operators['not'], Const(True))
+        want = Not(Const(True))
         self.assertEqual(result, want)
 
     def test_not_false(self):
         result = self.parser.parse("not False")[0]
-        want = Unary(operators['not'], Const(False))
+        want = Not(Const(False))
         self.assertEqual(result, want)
 
     def test_plus(self):
@@ -136,9 +136,7 @@ class TestOperator(unittest.TestCase):
 
     def test_gtstring(self):
         result = self.parser.parse("'foo and bar' lt 'baz'")[0]
-        want = Binary(operators['lt'],
-            Const('foo and bar'),
-            Const('baz'))
+        want = Binary(operators['lt'], Const('foo and bar'), Const('baz'))
         self.assertEqual(result, want)
 
     def test_eq(self):
@@ -160,32 +158,32 @@ class TestOperator(unittest.TestCase):
 
     def test_and(self):
         result = self.parser.parse("True and True")[0]
-        want = Binary(operators['and'], Const(True), Const(True))
+        want = And(Const(True), Const(True))
         self.assertEqual(result, want)
 
     def test_or(self):
         result = self.parser.parse("False or True")[0]
-        want = Binary(operators['or'], Const(False), Const(True))
+        want = Or(Const(False), Const(True))
         self.assertEqual(result, want)
 
     def test_eqandgt(self):
         result = self.parser.parse("2 == 2 and 8 > 2")[0]
-        want = Binary(operators['and'],
+        want = And(
             Binary(operators['=='], Const(2), Const(2)),
             Binary(operators['>'], Const(8), Const(2)))
         self.assertEqual(result, want)
 
     def test_eqorgt(self):
         result = self.parser.parse("2 != 2 or 8 > 2")[0]
-        want = Binary(operators['or'],
+        want = Or(
             Binary(operators['!='], Const(2), Const(2)),
             Binary(operators['>'], Const(8), Const(2)))
         self.assertEqual(result, want)
 
     def test_notand(self):
         result = self.parser.parse("not False and True")[0]
-        want = Binary(operators['and'],
-            Unary(operators['not'], Const(False)),
+        want = And(
+            Not(Const(False)),
             Const(True))
         self.assertEqual(result, want)
 
