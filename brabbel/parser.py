@@ -11,10 +11,14 @@ from pyparsing import (
     delimitedList,
     opAssoc, infixNotation, oneOf)
 
-from brabbel.operators import operators
 from brabbel.functions import functions
 from brabbel.nodes import (
-    Const, Func, Variable, Binary, Unary, List, Not, And, Or)
+    Const, Func, Variable,
+    Call,
+    Add, Sub, Mul, Div,
+    In, List,
+    Not, And, Or,
+    LT, GT, LE, GE, EQ, NE)
 
 
 """
@@ -48,34 +52,55 @@ def _make_func(s, loc, toks):
     fn = functions[name]
     arity = len(args)
     if arity == 1:
-        return Unary(fn, args[0])
-    if arity == 2:
-        return Binary(fn, args[0], args[1])
+        return Call(fn, args[0])
     return Func(fn, args[:])
 
-def _make_binary(create = lambda op, a, b: Binary(op, a, b)):
-    def make(s, loc, toks):
-        toks = toks[0]
-        a, op, b = toks[0], toks[1], toks[2]
 
-        a = create(operators[op], a, b)
+binaries = {
+    'and': And,
+    'or': Or,
+    '+': Add,
+    '-': Sub,
+    '*': Mul,
+    '/': Div,
+    '<': LT,
+    'lt': LT,
+    '>': GT,
+    'gt': GT,
+    '<=': LE,
+    'le': LE,
+    '>=': GE,
+    'ge': GE,
+    '==': EQ,
+    'eq': EQ,
+    '!=': NE,
+    'ne': NE,
+    'in': In }
 
-        remaining = iter(toks[3:])
-        while True:
-            op = next(remaining, None)
-            if op is None:
-                break
-            b = next(remaining)
-            a = create(operators[op], a, b)
+unaries = { 'not': Not }
 
-        return a
-    return make
 
-def _make_unary(create = lambda op, a: Unary(op, a)):
-    def make(s, loc, toks):
-        toks = toks[0]
-        return create(operators[toks[0]], toks[1])
-    return make
+def _make_binary(s, loc, toks):
+    toks = toks[0]
+    a, op, b = toks[0], toks[1], toks[2]
+
+    a = binaries[op](a, b)
+
+    remaining = iter(toks[3:])
+    while True:
+        op = next(remaining, None)
+        if op is None:
+            break
+        b = next(remaining)
+        a = binaries[op](a, b)
+
+    return a
+
+
+def _make_unary(s, loc, toks):
+    toks = toks[0]
+    return unaries[toks[0]](toks[1])
+
 
 ########################################################################
 #                                ATOMS                                 #
@@ -100,14 +125,14 @@ false = Literal("False")
 atom = Forward()
 infix = infixNotation(atom,
     [
-    ('not', 1, opAssoc.RIGHT, _make_unary(lambda op, a: Not(a))),
-    (oneOf('* /'), 2, opAssoc.LEFT, _make_binary()),
-    (oneOf('+ -'), 2, opAssoc.LEFT, _make_binary()),
+    ('not', 1, opAssoc.RIGHT, _make_unary),
+    (oneOf('* /'), 2, opAssoc.LEFT, _make_binary),
+    (oneOf('+ -'), 2, opAssoc.LEFT, _make_binary),
     (oneOf('> gt >= ge < lt <= le != ne == eq'),
-        2, opAssoc.LEFT, _make_binary()),
-    ('and', 2, opAssoc.LEFT, _make_binary(lambda op, a, b: And(a, b))),
-    ('or', 2, opAssoc.LEFT, _make_binary(lambda op, a, b: Or(a, b))),
-    ('in', 2, opAssoc.LEFT, _make_binary()),
+        2, opAssoc.LEFT, _make_binary),
+    ('and', 2, opAssoc.LEFT, _make_binary),
+    ('or', 2, opAssoc.LEFT, _make_binary),
+    ('in', 2, opAssoc.LEFT, _make_binary),
     ])
 dellist = delimitedList(Optional(atom))
 listing = lbr.suppress() + dellist + rbr.suppress()

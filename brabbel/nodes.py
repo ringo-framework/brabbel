@@ -12,85 +12,58 @@ class Node(object):
 class Binary(Node):
     """Binary terms"""
 
-    def __init__(self, op, a, b):
-        self.op = op
+    def __init__(self, a, b):
         self.a = a
         self.b = b
 
-    def evaluate(self, ctx):
-        return self.op(self.a.evaluate(ctx), self.b.evaluate(ctx))
-
     def __eq__(self, other):
-        return self.op == other.op and self.a == other.a and self.b == other.b
+        return self.a == other.a and self.b == other.b
 
 class Unary(Node):
     """Unary terms"""
 
-    def __init__(self, op, a):
-        self.op = op
-        self.a = a
-
-    def evaluate(self, ctx):
-        return self.op(self.a.evaluate(ctx))
-
-    def __eq__(self, other):
-        return self.op == other.op and self.a == other.a
-
-class Not(Node):
-    """Optimized 'not' terms"""
-
     def __init__(self, a):
         self.a = a
-
-    def evaluate(self, ctx):
-        return not self.a.evaluate(ctx)
 
     def __eq__(self, other):
         return self.a == other.a
 
+class Not(Unary):
+    """Optimized 'not' terms"""
 
-class And(Node):
+    def evaluate(self, ctx):
+        return not self.a.evaluate(ctx)
+
+class And(Binary):
     """Optimized 'and' terms"""
-
-    def __init__(self, a, b):
-        self.a = a
-        self.b = b
 
     def evaluate(self, ctx):
         # Short eval
         return self.a.evaluate(ctx) and self.b.evaluate(ctx)
 
-    def __eq__(self, other):
-        return self.a == other.a and self.b == other.b
-
-
-class Or(Node):
+class Or(Binary):
     """Optimized 'or' terms"""
-
-    def __init__(self, a, b):
-        self.a = a
-        self.b = b
 
     def evaluate(self, ctx):
         # Short eval
         return self.a.evaluate(ctx) or self.b.evaluate(ctx)
 
-    def __eq__(self, other):
-        return self.a == other.a and self.b == other.b
-
-
-class Const(Node):
+class Const(Unary):
     """Constant terms"""
-
-    def __init__(self, a):
-        self.a = a
 
     def evaluate(self, ctx):
         return self.a
 
-    def __eq__(self, other):
-        return self.a == other.a
+class Call(Node):
+    def __init__(self, fn, a):
+        self.fn = fn
+        self.a = a
 
+    def evaluate(self, ctx):
+        return self.fn(self.a.evaluate(ctx))
+
+    def __eq__(self, other):
+        return self.fn == other.fn and self.a == other.a
 
 class Func(Node):
     """Function terms"""
@@ -118,20 +91,85 @@ class List(Node):
     def __eq__(self, other):
         return self.l == other.l
 
-class Variable(Node):
+class Variable(Unary):
     """Variable terms"""
-
-    def __init__(self, var):
-        self.var = var
 
     def evaluate(self, ctx):
         try:
-            value = ctx[self.var]
+            value = ctx[self.a]
         except KeyError:
             log.warning("Variable %s could not found in the values."
-                        % self.var)
+                        % self.a)
             value = None
         return value
 
-    def __eq__(self, other):
-        return self.var == other.var
+class Add(Binary):
+    """'+' terms"""
+
+    def evaluate(self, ctx):
+        return self.a.evaluate(ctx) + self.b.evaluate(ctx)
+
+class Sub(Binary):
+    """'-' terms"""
+
+    def evaluate(self, ctx):
+        return self.a.evaluate(ctx) - self.b.evaluate(ctx)
+
+class Mul(Binary):
+    """'*' terms"""
+
+    def evaluate(self, ctx):
+        return self.a.evaluate(ctx) * self.b.evaluate(ctx)
+
+class Div(Binary):
+    """'/' terms"""
+
+    def evaluate(self, ctx):
+        """Divided a with b. In case a nd b are integer values return a
+        integer values. Otherwise a float value will be returned"""
+        a, b = self.a.evaluate(ctx), self.b.evaluate(ctx)
+        if isinstance(b, int):
+            return int(a / b)
+        return a / b
+
+class LT(Binary):
+    """'<' terms"""
+
+    def evaluate(self, ctx):
+        return self.a.evaluate(ctx) < self.b.evaluate(ctx)
+
+class GT(Binary):
+    """'>' terms"""
+
+    def evaluate(self, ctx):
+        return self.a.evaluate(ctx) > self.b.evaluate(ctx)
+
+class LE(Binary):
+    """'<=' terms"""
+
+    def evaluate(self, ctx):
+        return self.a.evaluate(ctx) <= self.b.evaluate(ctx)
+
+class GE(Binary):
+    """'>=' terms"""
+
+    def evaluate(self, ctx):
+        return self.a.evaluate(ctx) >= self.b.evaluate(ctx)
+
+class EQ(Binary):
+    """'==' terms"""
+
+    def evaluate(self, ctx):
+        return self.a.evaluate(ctx) == self.b.evaluate(ctx)
+
+class NE(Binary):
+    """'!=' terms"""
+
+    def evaluate(self, ctx):
+        return self.a.evaluate(ctx) != self.b.evaluate(ctx)
+
+class In(Binary):
+    """'!=' terms"""
+
+    def evaluate(self, ctx):
+        return self.a.evaluate(ctx) in self.b.evaluate(ctx)

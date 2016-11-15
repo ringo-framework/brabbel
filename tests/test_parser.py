@@ -3,7 +3,12 @@ from brabbel.parser import Parser
 from brabbel.operators import operators
 from brabbel.functions import functions
 from brabbel.nodes import (
-    Const, Variable, List, Unary, Binary, List, And, Or, Not)
+    Const, Variable,
+    List, In,
+    Add, Sub, Mul, Div,
+    And, Or, Not,
+    LT, GT, LE, GE, EQ, NE,
+    Call)
 
 
 class TestAtom(unittest.TestCase):
@@ -73,13 +78,13 @@ class TestOperator(unittest.TestCase):
 
     def test_plus(self):
         result = self.parser.parse("1 + 1")[0]
-        want = Binary(operators['+'], Const(1), Const(1))
+        want = Add(Const(1), Const(1))
         self.assertEqual(result, want)
 
     def test_plusplus(self):
         result = self.parser.parse("1 + 1 + 3")[0]
-        want = Binary(operators['+'],
-            Binary(operators['+'],
+        want = Add(
+            Add(
                 Const(1),
                 Const(1)),
             Const(3))
@@ -87,73 +92,73 @@ class TestOperator(unittest.TestCase):
 
     def test_minus(self):
         result = self.parser.parse("1 - 1")[0]
-        want = Binary(operators['-'], Const(1), Const(1))
+        want = Sub(Const(1), Const(1))
         self.assertEqual(result, want)
 
     def test_mul(self):
         result = self.parser.parse("1 * 1")[0]
-        want = Binary(operators['*'], Const(1), Const(1))
+        want = Mul(Const(1), Const(1))
         self.assertEqual(result, want)
 
     def test_div(self):
         result = self.parser.parse("1 / 1")[0]
-        want = Binary(operators['/'], Const(1), Const(1))
+        want = Div(Const(1), Const(1))
         self.assertEqual(result, want)
 
     def test_plusmul(self):
         result = self.parser.parse("1 + 1 * 3")[0]
-        want = Binary(operators['+'],
+        want = Add(
             Const(1),
-            Binary(operators['*'], Const(1), Const(3)))
+            Mul(Const(1), Const(3)))
         self.assertEqual(result, want)
 
     def test_plusmulparent(self):
         result = self.parser.parse("(1 + 1) * 3")[0]
-        want = Binary(operators['*'],
-            Binary(operators['+'], Const(1), Const(1)),
+        want = Mul(
+            Add(Const(1), Const(1)),
             Const(3))
         self.assertEqual(result, want)
 
     def test_lt(self):
         result = self.parser.parse("1 < 2")[0]
-        want = Binary(operators['<'], Const(1), Const(2))
+        want = LT(Const(1), Const(2))
         self.assertEqual(result, want)
 
     def test_le(self):
         result = self.parser.parse("1 <= 2")[0]
-        want = Binary(operators['<='], Const(1), Const(2))
+        want = LE(Const(1), Const(2))
         self.assertEqual(result, want)
 
     def test_ge(self):
         result = self.parser.parse("2 >= 1")[0]
-        want = Binary(operators['>='], Const(2), Const(1))
+        want = GE(Const(2), Const(1))
         self.assertEqual(result, want)
 
     def test_gt(self):
         result = self.parser.parse("2 > 1")[0]
-        want = Binary(operators['>'], Const(2), Const(1))
+        want = GT(Const(2), Const(1))
         self.assertEqual(result, want)
 
     def test_gtstring(self):
         result = self.parser.parse("'foo and bar' lt 'baz'")[0]
-        want = Binary(operators['lt'], Const('foo and bar'), Const('baz'))
+        want = LT(Const('foo and bar'), Const('baz'))
         self.assertEqual(result, want)
 
     def test_eq(self):
         result = self.parser.parse("2 == 2")[0]
-        want = Binary(operators['=='], Const(2), Const(2))
+        want = EQ(Const(2), Const(2))
         self.assertEqual(result, want)
 
     def test_ne(self):
         result = self.parser.parse("2 != 1")[0]
-        want = Binary(operators['!='], Const(2), Const(1))
+        want = NE(Const(2), Const(1))
         self.assertEqual(result, want)
 
     def test_plusnediv(self):
         result = self.parser.parse("2 + 2 != 8 / 2")[0]
-        want = Binary(operators['!='],
-            Binary(operators['+'], Const(2), Const(2)),
-            Binary(operators['/'], Const(8), Const(2)))
+        want = NE(
+            Add(Const(2), Const(2)),
+            Div(Const(8), Const(2)))
         self.assertEqual(result, want)
 
     def test_and(self):
@@ -169,15 +174,15 @@ class TestOperator(unittest.TestCase):
     def test_eqandgt(self):
         result = self.parser.parse("2 == 2 and 8 > 2")[0]
         want = And(
-            Binary(operators['=='], Const(2), Const(2)),
-            Binary(operators['>'], Const(8), Const(2)))
+            EQ(Const(2), Const(2)),
+            GT(Const(8), Const(2)))
         self.assertEqual(result, want)
 
     def test_eqorgt(self):
         result = self.parser.parse("2 != 2 or 8 > 2")[0]
         want = Or(
-            Binary(operators['!='], Const(2), Const(2)),
-            Binary(operators['>'], Const(8), Const(2)))
+            NE(Const(2), Const(2)),
+            GT(Const(8), Const(2)))
         self.assertEqual(result, want)
 
     def test_notand(self):
@@ -189,29 +194,29 @@ class TestOperator(unittest.TestCase):
 
     def test_in(self):
         result = self.parser.parse("'foo' in ['foo','bar']")[0]
-        want = Binary(operators['in'],
+        want = In(
             Const('foo'),
             List([Const('foo'), Const('bar')]))
         self.assertEqual(result, want)
 
     def test_date_date(self):
         result = self.parser.parse("date('20000101')")[0]
-        want = Unary(functions['date'], Const('20000101'))
+        want = Call(functions['date'], Const('20000101'))
         self.assertEqual(result, want)
 
     def test_date_today(self):
         result = self.parser.parse("date('today')")[0]
-        want = Unary(functions['date'], Const('today'))
+        want = Call(functions['date'], Const('today'))
         self.assertEqual(result, want)
 
     def test_varlttoday(self):
         result = self.parser.parse("$xxx < date('today')")[0]
-        want = Binary(operators['<'],
+        want = LT(
             Variable("xxx"),
-            Unary(functions['date'], Const('today')))
+            Call(functions['date'], Const('today')))
         self.assertEqual(result, want)
 
     def test_bool(self):
         result = self.parser.parse("bool(1)")[0]
-        want = Unary(functions['bool'], Const(1))
+        want = Call(functions['bool'], Const(1))
         self.assertEqual(result, want)
