@@ -19,6 +19,7 @@ class Binary(Node):
     def __eq__(self, other):
         return self.a == other.a and self.b == other.b
 
+
 class Unary(Node):
     """Unary terms"""
 
@@ -28,11 +29,13 @@ class Unary(Node):
     def __eq__(self, other):
         return self.a == other.a
 
+
 class Not(Unary):
     """Optimized 'not' terms"""
 
     def evaluate(self, ctx):
         return not self.a.evaluate(ctx)
+
 
 class And(Binary):
     """Optimized 'and' terms"""
@@ -41,6 +44,7 @@ class And(Binary):
         # Short eval
         return self.a.evaluate(ctx) and self.b.evaluate(ctx)
 
+
 class Or(Binary):
     """Optimized 'or' terms"""
 
@@ -48,13 +52,16 @@ class Or(Binary):
         # Short eval
         return self.a.evaluate(ctx) or self.b.evaluate(ctx)
 
+
 class Const(Unary):
     """Constant terms"""
 
     def evaluate(self, ctx):
         return self.a
 
+
 class Call(Node):
+    """Call terms"""
     def __init__(self, fn, a):
         self.fn = fn
         self.a = a
@@ -64,6 +71,7 @@ class Call(Node):
 
     def __eq__(self, other):
         return self.fn == other.fn and self.a == other.a
+
 
 class Func(Node):
     """Function terms"""
@@ -91,6 +99,7 @@ class List(Node):
     def __eq__(self, other):
         return self.l == other.l
 
+
 class Variable(Unary):
     """Variable terms"""
 
@@ -103,11 +112,13 @@ class Variable(Unary):
             value = None
         return value
 
+
 class Add(Binary):
     """'+' terms"""
 
     def evaluate(self, ctx):
         return self.a.evaluate(ctx) + self.b.evaluate(ctx)
+
 
 class Sub(Binary):
     """'-' terms"""
@@ -115,11 +126,13 @@ class Sub(Binary):
     def evaluate(self, ctx):
         return self.a.evaluate(ctx) - self.b.evaluate(ctx)
 
+
 class Mul(Binary):
     """'*' terms"""
 
     def evaluate(self, ctx):
         return self.a.evaluate(ctx) * self.b.evaluate(ctx)
+
 
 class Div(Binary):
     """'/' terms"""
@@ -132,11 +145,13 @@ class Div(Binary):
             return int(a / b)
         return a / b
 
+
 class LT(Binary):
     """'<' terms"""
 
     def evaluate(self, ctx):
         return self.a.evaluate(ctx) < self.b.evaluate(ctx)
+
 
 class GT(Binary):
     """'>' terms"""
@@ -144,11 +159,13 @@ class GT(Binary):
     def evaluate(self, ctx):
         return self.a.evaluate(ctx) > self.b.evaluate(ctx)
 
+
 class LE(Binary):
     """'<=' terms"""
 
     def evaluate(self, ctx):
         return self.a.evaluate(ctx) <= self.b.evaluate(ctx)
+
 
 class GE(Binary):
     """'>=' terms"""
@@ -156,17 +173,20 @@ class GE(Binary):
     def evaluate(self, ctx):
         return self.a.evaluate(ctx) >= self.b.evaluate(ctx)
 
+
 class EQ(Binary):
     """'==' terms"""
 
     def evaluate(self, ctx):
         return self.a.evaluate(ctx) == self.b.evaluate(ctx)
 
+
 class NE(Binary):
     """'!=' terms"""
 
     def evaluate(self, ctx):
         return self.a.evaluate(ctx) != self.b.evaluate(ctx)
+
 
 class In(Binary):
     """'!=' terms"""
