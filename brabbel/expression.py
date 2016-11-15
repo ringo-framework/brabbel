@@ -2,7 +2,6 @@ from builtins import object
 import logging
 from pyparsing import ParseResults
 from brabbel.parser import Parser
-from brabbel.operators import operators
 from brabbel.functions import functions
 
 logging.basicConfig()

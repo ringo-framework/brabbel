@@ -1,6 +1,5 @@
 import unittest
 from brabbel.parser import Parser
-from brabbel.operators import operators
 from brabbel.functions import functions
 from brabbel.nodes import (
     Const, Variable,
