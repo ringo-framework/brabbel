@@ -189,7 +189,7 @@ class NE(Binary):
 
 
 class In(Binary):
-    """'!=' terms"""
+    """'in' terms"""
 
     def evaluate(self, ctx):
         return self.a.evaluate(ctx) in self.b.evaluate(ctx)
