@@ -2,48 +2,12 @@ from builtins import object
 import logging
 from pyparsing import ParseResults
 from brabbel.parser import Parser
-from brabbel.operators import operators
 from brabbel.functions import functions
 
 logging.basicConfig()
 log = logging.getLogger(__name__)
 
 from threading import Lock
-
-class OperandMissmatchError(TypeError):
-    pass
-
-
-def _evaluate_term(op, operand):
-        if op is None:
-            return operand[0]
-        elif op == "not":
-            return operators[op](operand[0])
-        elif op == "in":
-            return operators[op](operand[0], operand[1])
-        elif type(operand[0]) == type(operand[1]):
-            # Only evalutate the term if both operators of the operand are
-            # of the same type.
-            return operators[op](operand[0], operand[1])
-        else:
-            # If the type of the operands are not the same, then raise
-            # an expection.
-            msg = ("Can not use operands '%s' on operator '%s'. "
-                   "Type of operands must be equal"
-                   % ((operand[0], type(operand[0]),
-                      operand[1], type(operand[1])), op))
-            raise OperandMissmatchError(msg)
-
-
-def _resolve_variable(key, values):
-    try:
-        value = values[key.strip("$")]
-    except KeyError:
-        log.warning("Variable %s could not found in the values."
-                    % key.strip("$"))
-        value = None
-    return value
-
 
 class Expression(object):
 
@@ -61,7 +25,7 @@ class Expression(object):
             try:
                 tree = Expression.cache[expression]
             except KeyError:
-                tree = Parser().parse(expression)
+                tree = Parser().parse(expression)[0]
                 Expression.cache[expression] = tree
 
         self._expression = expression
@@ -80,43 +44,8 @@ class Expression(object):
         return self._evaluate(self._expression_tree, values)
 
     def _evaluate(self, tree, values):
-        operand = []
-        op = None
-        func = None
         try:
-            for element in tree:
-                if func:
-                    param = element[0]
-                    if isinstance(param, (str, unicode)) and param.startswith("$"):
-                        param = _resolve_variable(param, values)
-                    result = func(param)
-                    operand.append(result)
-                    func = None
-                elif isinstance(element, ParseResults):
-                    operand.append(self._evaluate(element, values))
-                elif element in list(operators.keys()):
-                    op = element
-                    # Short curcuiting "and" and "or" opertator
-                    if op == "and" and not bool(operand[0]):
-                        return False
-                    if op == "or" and bool(operand[0]):
-                        return True
-                elif element in list(functions.keys()):
-                    func = functions[element]
-                else:
-                    if isinstance(element, (str, unicode)) and element.startswith("$"):
-                        element = _resolve_variable(element, values)
-                    operand.append(element)
-
-                # Preevaluate here and use the result as the first operand.
-                if len(operand) == 2:
-                    operand = [_evaluate_term(op, operand)]
-                    op = None
-            return _evaluate_term(op, operand)
-        except OperandMissmatchError as ex:
-            log.error("Can not evaluate expression '%s': %s"
-                      % (self._expression, ex.message))
-            raise
+            return tree.evaluate(values)
         except:
             log.exception("Can not evaluate expression '%s'"
                           % self._expression)
