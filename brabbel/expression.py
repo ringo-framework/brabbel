@@ -96,7 +96,6 @@ class Expression(object):
             else:
                 if isinstance(element, str) and element.startswith("$"):
                     element = _resolve_variable(element, values)
-                print element
                 operand.append(element)
 
             # Preevaluate here and use the result as the first operand.
