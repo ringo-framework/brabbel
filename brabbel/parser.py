@@ -145,7 +145,7 @@ dellist = delimitedList(Optional(atom))
 listing = lbr.suppress() + dellist + rbr.suppress()
 function = identifier.setResultsName('name') + lpar.suppress() + Group(
         Optional(delimitedList(atom))).setResultsName("args") + rpar.suppress()
-atom <<= listing | number | string | variable | true | false | none | function
+atom << (listing | number | string | variable | true | false | none | function)
 
 _false = Const(False)
 _true = Const(True)
