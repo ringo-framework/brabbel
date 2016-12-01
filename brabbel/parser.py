@@ -9,7 +9,14 @@ from pyparsing import (
     Combine, Group, Optional,
     nums, alphanums, alphas, sglQuotedString,
     delimitedList,
-    opAssoc, infixNotation, oneOf)
+    opAssoc, oneOf)
+
+try:
+    from pyparsing import infixNotation
+except ImportError:
+    # For old versions of PyParsing
+    from pyparsing import operatorPrecedence as infixNotation
+
 
 from brabbel.functions import functions
 from brabbel.nodes import (
@@ -138,7 +145,7 @@ dellist = delimitedList(Optional(atom))
 listing = lbr.suppress() + dellist + rbr.suppress()
 function = identifier.setResultsName('name') + lpar.suppress() + Group(
         Optional(delimitedList(atom))).setResultsName("args") + rpar.suppress()
-atom <<= listing | number | string | variable | true | false | none | function
+atom << (listing | number | string | variable | true | false | none | function)
 
 _false = Const(False)
 _true = Const(True)
