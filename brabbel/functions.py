@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from builtins import str
 from datetime import date, timedelta
 
@@ -123,7 +124,7 @@ def _len(v):
         return len(v)
     elif v is None:
         return 0
-    return len(unicode(v))
+    return len(str(v))
 
 functions = {
     "date": _date,

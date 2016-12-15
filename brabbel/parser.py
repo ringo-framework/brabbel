@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import logging
 from threading import Lock
 from builtins import object
@@ -36,7 +37,7 @@ ParserElement.enablePackrat()
 
 
 def _str(s):
-    return unicode(s.strip("'"))
+    return str(s.strip("'"))
 
 
 def _number(s):
