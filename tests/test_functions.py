@@ -25,4 +25,4 @@ class TestTime(unittest.TestCase):
     def test_over(self):
         from brabbel.functions import _timedelta
         result = _timedelta('127:01:00')
-        self.assertEqual(result, timedelta(hours=127, minutes=01, seconds=00))
+        self.assertEqual(result, timedelta(hours=127, minutes=1, seconds=0))
