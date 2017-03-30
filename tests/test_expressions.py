@@ -26,6 +26,16 @@ class TestExpression(unittest.TestCase):
         result = expression.evaluate()
         self.assertEqual(result, "foo and bar")
 
+    def test_stringwithsinglequote(self):
+        expression = Expression("'foo 'and bar'")
+        result = expression.evaluate()
+        self.assertEqual(result, "foo 'and bar")
+
+    def test_stringwithbracket(self):
+        expression = Expression("'foo (and bar'")
+        result = expression.evaluate()
+        self.assertEqual(result, "foo (and bar")
+
     def test_variable(self):
         expression = Expression("$string")
         result = expression.evaluate({"string": "string"})
