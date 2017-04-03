@@ -112,6 +112,8 @@ def _len(v):
     5
     >>> _len('')
     0
+    >>> _len("That\'s right!")
+    13
     >>> _len(None)
     0
 
@@ -123,7 +125,7 @@ def _len(v):
         return len(v)
     elif v is None:
         return 0
-    return len(unicode(v))
+    return len(unicode(v).replace("\\", ""))
 
 functions = {
     "date": _date,
