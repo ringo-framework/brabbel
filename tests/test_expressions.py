@@ -27,9 +27,9 @@ class TestExpression(unittest.TestCase):
         self.assertEqual(result, "foo and bar")
 
     def test_stringwithsinglequote(self):
-        expression = Expression("'foo 'and bar'")
+        expression = Expression("'foo \\'and bar'")
         result = expression.evaluate()
-        self.assertEqual(result, "foo 'and bar")
+        self.assertEqual(result, "foo \\'and bar")
 
     def test_stringwithbracket(self):
         expression = Expression("'foo (and bar'")
