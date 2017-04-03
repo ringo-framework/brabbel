@@ -226,6 +226,15 @@ might not behave as expected. This can become a pitfall in some cases so
 this section will list some of them. If you know more please write me an
 Email so I can add these here.
 
+Singlequotes in Strings
+-----------------------
+Strings are surrounded by singlequotes. This is true for variables and for
+static strings. If you want to write a rule including a singlequote with
+the string you need to escape the string properly::
+
+       "$string == 'Thats\'s my variable'"
+
+
 .. _pitfall_nonevalue:
 
 Handling None values
