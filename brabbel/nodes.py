@@ -106,6 +106,8 @@ class Variable(Unary):
     def evaluate(self, ctx):
         try:
             value = ctx[self.a]
+            if isinstance(value, basestring):
+                value = value.replace("'", "\\'")
         except KeyError:
             log.warning("Variable %s could not found in the values."
                         % self.a)
